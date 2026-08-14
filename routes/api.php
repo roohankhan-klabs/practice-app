@@ -7,6 +7,10 @@ use App\Http\Controllers\Api\AddressController;
 Route::prefix('api/v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+    Route::post('send-otp', [AuthController::class, 'sendOtp']);
+    Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
     Route::get('/cities/{stateId}', [AddressController::class, 'cities']);
     Route::get('/states/{countryId}', [AddressController::class, 'states']);

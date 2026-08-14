@@ -51,10 +51,7 @@ class AddressController extends Controller
                 'required',
                 Rule::exists('countries', 'id'),
             ],
-            'is_default' => [
-                'required',
-                Rule::in([1, 0])
-            ],
+            'is_default' => 'required|boolean',
         ]);
 
         $address = Address::create([
@@ -95,10 +92,7 @@ class AddressController extends Controller
                 'required',
                 Rule::exists('countries', 'id'),
             ],
-            'is_default' => [
-                'required',
-                Rule::in([1, 0])
-            ],
+            'is_default' => 'required|boolean',
         ]);
 
         $address = Address::where('user_id', $request->user()->id)->where('id', $id)->first();
