@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\Controller;
+use App\Models\Role;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -39,14 +41,12 @@ class AuthController extends Controller
             'confirm_password' => 'required|same:password',
         ]);
 
-        if ($validated['password'] != $validated['confirm_password']) {
-            return $this->formatError('Passwords do not match', 401);
-        }
-
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'status_id'=> Status::ACTIVE,
+            'role_id'=> Role::CUSTOMER,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

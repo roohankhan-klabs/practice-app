@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             StateSeeder::class,
             CitySeeder::class,
-            AddressSeeder::class,
             RoleSeeder::class,
             StatusSeeder::class,
             UsersSeeder::class,
+            AddressSeeder::class,
         ]);
     }
 }

@@ -35,7 +35,6 @@ class UsersSeeder extends Seeder
             'email' => 'customer1@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'address_id' => 1,
             'status_id' => 1,
             'role_id' => 3,
         ]);
@@ -44,7 +43,6 @@ class UsersSeeder extends Seeder
             'email' => 'customer2@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'address_id' => 2,
             'status_id' => 1,
             'role_id' => 3,
         ]);
@@ -53,7 +51,6 @@ class UsersSeeder extends Seeder
             'email' => 'customer3@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'address_id' => 3,
             'status_id' => 1,
             'role_id' => 3,
         ]);
@@ -62,7 +59,6 @@ class UsersSeeder extends Seeder
             'email' => 'customer4@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'address_id' => 4,
             'status_id' => 1,
             'role_id' => 3,
         ]);

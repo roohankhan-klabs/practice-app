@@ -14,6 +14,7 @@ class AddressSeeder extends Seeder
     public function run(): void
     {
         Address::create([
+            'user_id' => 3,
             'address_line_1' => '123 Main St',
             'address_line_2' => 'Apt 1',
             'preffered_contact_number' => '1234567890',
@@ -23,6 +24,7 @@ class AddressSeeder extends Seeder
             'country_id' => 1,
         ]);
         Address::create([
+            'user_id' => 4,
             'address_line_1' => '456 Main St',
             'address_line_2' => 'Apt 2',
             'preffered_contact_number' => '1234567890',
@@ -32,6 +34,7 @@ class AddressSeeder extends Seeder
             'country_id' => 2,
         ]);
         Address::create([
+            'user_id' => 5,
             'address_line_1' => '789 Main St',
             'address_line_2' => 'Apt 3',
             'preffered_contact_number' => '1234567890',
@@ -41,6 +44,7 @@ class AddressSeeder extends Seeder
             'country_id' => 3,
         ]);
         Address::create([
+            'user_id' => 6,
             'address_line_1' => '101 Main St',
             'address_line_2' => 'Apt 4',
             'preffered_contact_number' => '1234567890',
