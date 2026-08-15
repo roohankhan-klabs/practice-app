@@ -26,6 +26,36 @@ return new class extends Migration
             $table->string('currency_exchange_rate_date');
             $table->timestamps();
         });
+
+        Schema::create('shops', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('shop_name');
+            $table->text('description')->nullable();
+            $table->string('cover_image')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('whatsapp_number')->nullable();
+            $table->string('contact_number')->nullable();
+            $table->string('address_id')->nullable();
+            $table->string('shipping_policy')->nullable();
+            $table->string('refund_policy')->nullable();
+            $table->string('return_policy')->nullable();
+            $table->string('privacy_policy')->nullable();
+            $table->string('terms_of_service')->nullable();
+            $table->string('google_maps_link')->nullable();
+            $table->string('avg_rating')->nullable();
+            $table->string('total_reviews')->nullable();
+            $table->string('status')->nullable();
+            $table->string('is_featured')->nullable();
+            $table->string('shipping_fee_type')->nullable();
+            $table->string('shipping_fee_amount')->nullable();
+            $table->string('estimated_delivery_time')->nullable();
+            $table->string('commission_percentage')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('tiktok')->nullable();
+            $table->timestamps();
+        });
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();

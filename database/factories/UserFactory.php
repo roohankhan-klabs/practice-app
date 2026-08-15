@@ -32,9 +32,9 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'two_factor_confirmed_at' => null,
+            'phone' => fake()->phoneNumber(),
+            'status' => 'active',
+            'role_id' => 3, // Default to Customer
         ];
     }
 
@@ -67,14 +67,52 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model has two-factor authentication configured.
+     * Indicate that the user is a super admin.
      */
-    public function withTwoFactor(): static
+    public function superAdmin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'two_factor_secret' => encrypt('secret'),
-            'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
-            'two_factor_confirmed_at' => now(),
+            'role_id' => 1,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 2,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a customer.
+     */
+    public function customer(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 3,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a vendor.
+     */
+    public function vendor(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 4,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a staff.
+     */
+    public function staff(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role_id' => 5,
         ]);
     }
 }

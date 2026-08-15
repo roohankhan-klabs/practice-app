@@ -12,7 +12,7 @@ class AddressSeeder extends Seeder
      */
     public function run(): void
     {
-        Address::create([
+        Address::factory()->create([
             'user_id' => 3,
             'address_line_1' => '123 Main St',
             'address_line_2' => 'Apt 1',
@@ -22,7 +22,7 @@ class AddressSeeder extends Seeder
             'state_id' => 1,
             'country_id' => 1,
         ]);
-        Address::create([
+        Address::factory()->create([
             'user_id' => 4,
             'address_line_1' => '456 Main St',
             'address_line_2' => 'Apt 2',
@@ -32,7 +32,7 @@ class AddressSeeder extends Seeder
             'state_id' => 2,
             'country_id' => 2,
         ]);
-        Address::create([
+        Address::factory()->create([
             'user_id' => 5,
             'address_line_1' => '789 Main St',
             'address_line_2' => 'Apt 3',
@@ -42,7 +42,7 @@ class AddressSeeder extends Seeder
             'state_id' => 3,
             'country_id' => 3,
         ]);
-        Address::create([
+        Address::factory()->create([
             'user_id' => 6,
             'address_line_1' => '101 Main St',
             'address_line_2' => 'Apt 4',

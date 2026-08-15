@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(
     [
         'user_id',
-        'order_id',
         'payment_method_id',
         'reference_type',
         'reference_id',
@@ -24,11 +23,6 @@ class Payment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
     }
 
     public function paymentMethod()

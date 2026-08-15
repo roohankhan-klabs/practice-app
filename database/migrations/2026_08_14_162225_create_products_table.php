@@ -33,35 +33,6 @@ return new class extends Migration
             $table->foreignId('device_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
-        Schema::create('shops', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('shop_name');
-            $table->text('description')->nullable();
-            $table->string('cover_image')->nullable();
-            $table->string('logo')->nullable();
-            $table->string('whatsapp_number')->nullable();
-            $table->string('contact_number')->nullable();
-            $table->string('address_id')->nullable();
-            $table->string('shipping_policy')->nullable();
-            $table->string('refund_policy')->nullable();
-            $table->string('return_policy')->nullable();
-            $table->string('privacy_policy')->nullable();
-            $table->string('terms_of_service')->nullable();
-            $table->string('google_maps_link')->nullable();
-            $table->string('avg_rating')->nullable();
-            $table->string('total_reviews')->nullable();
-            $table->string('status')->nullable();
-            $table->string('is_featured')->nullable();
-            $table->string('shipping_fee_type')->nullable();
-            $table->string('shipping_fee_amount')->nullable();
-            $table->string('estimated_delivery_time')->nullable();
-            $table->string('commission_percentage')->nullable();
-            $table->string('instagram')->nullable();
-            $table->string('facebook')->nullable();
-            $table->string('tiktok')->nullable();
-            $table->timestamps();
-        });
         Schema::create('shop_staff', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -133,6 +104,12 @@ return new class extends Migration
             $table->boolean('is_thumbnail')->default(false);
             $table->timestamps();
         });
+        Schema::create('variants', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->json('values');
+            $table->timestamps();
+        });
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
@@ -146,6 +123,30 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('variant_id')->constrained()->cascadeOnDelete();
             $table->unsignedInteger('quantity');
+            $table->timestamps();
+        });
+        Schema::create('payment_methods', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('code');
+            $table->string('icon');
+            $table->string('fee_type')->default('percentage');
+            $table->float('fee_value')->default(0.00);
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete();
+            $table->string('reference_type');
+            $table->string('reference_id');
+            $table->string('transaction_id');
+            $table->string('tap_charge_id')->nullable();
+            $table->string('tap_tracking_id')->nullable();
+            $table->string('status');
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
         Schema::create('orders', function (Blueprint $table) {
@@ -180,31 +181,6 @@ return new class extends Migration
             $table->foreignId('device_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('variant_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->timestamps();
-        });
-        Schema::create('payment_methods', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->string('icon');
-            $table->string('fee_type')->default('percentage');
-            $table->float('fee_value')->default(0.00);
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
-        });
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete();
-            $table->string('reference_type');
-            $table->string('reference_id');
-            $table->string('transaction_id');
-            $table->string('tap_charge_id')->nullable();
-            $table->string('tap_tracking_id')->nullable();
-            $table->string('status');
-            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
         Schema::create('payment_logs', function (Blueprint $table) {
