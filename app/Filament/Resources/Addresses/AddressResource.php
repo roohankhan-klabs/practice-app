@@ -22,6 +22,7 @@ class AddressResource extends Resource
     protected static ?string $model = Address::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice;
+
     protected static string|UnitEnum|null $navigationGroup = 'Locations';
 
     public static function form(Schema $schema): Schema

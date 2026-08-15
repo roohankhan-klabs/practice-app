@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\Status;
-use App\Http\Controllers\Api\Controller;
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Verification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -21,7 +20,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return $this->formatError('Invalid credentials', 401);
         }
 
@@ -93,7 +92,7 @@ class AuthController extends Controller
 
         $user = $request->user();
 
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        if (! Hash::check($validated['current_password'], $user->password)) {
             return $this->formatError('Invalid current password', 401);
         }
 
@@ -112,7 +111,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->formatError('User not found', 404);
         }
         $verification = Verification::where('user_id', $user->id)->where('created_at', '>=', now()->subMinutes(1))->first();
@@ -147,7 +146,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->formatError('User not found', 404);
         }
 
@@ -156,13 +155,14 @@ class AuthController extends Controller
             ->where('status', Status::Pending)
             ->first();
 
-        if (!$verification) {
+        if (! $verification) {
             return $this->formatError('Invalid OTP', 401);
         }
         if ($verification->created_at < now()->subMinutes(5)) {
             $verification->update([
                 'status' => Status::Expired,
             ]);
+
             return $this->formatError('OTP expired', 401);
         }
 
@@ -185,7 +185,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->formatError('User not found', 404);
         }
 
@@ -206,7 +206,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user) {
+        if (! $user) {
             return $this->formatError('User not found', 404);
         }
 
@@ -215,7 +215,7 @@ class AuthController extends Controller
             ->where('status', Status::Verified)
             ->first();
 
-        if (!$verification) {
+        if (! $verification) {
             return $this->formatError('Invalid OTP', 401);
         }
 

@@ -20,6 +20,7 @@ class VariantOption extends Model
     {
         return $this->belongsTo(VariantType::class);
     }
+
     public function variants()
     {
         return $this->belongsToMany(Variant::class, 'variant_option_ids');

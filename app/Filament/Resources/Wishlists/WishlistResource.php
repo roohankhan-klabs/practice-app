@@ -22,6 +22,7 @@ class WishlistResource extends Resource
     protected static ?string $model = Wishlist::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Heart;
+
     protected static string|UnitEnum|null $navigationGroup = 'Orders Management';
 
     public static function form(Schema $schema): Schema

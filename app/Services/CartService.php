@@ -120,12 +120,14 @@ class CartService
             CartItem::where('cart_id', $cart->id)->delete();
         }
     }
+
     public function getUserCartItems(Request $request, array $cartItemIds): Collection
     {
         $cart = Cart::where('user_id', $request->user()->id)->first();
-        if (!$cart) {
+        if (! $cart) {
             return new Collection;
         }
+
         return CartItem::where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->get();
     }
 }

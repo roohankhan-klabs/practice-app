@@ -22,7 +22,9 @@ class ReviewResource extends Resource
     protected static ?string $model = Review::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ChatBubbleLeftRight;
+
     protected static string|UnitEnum|null $navigationGroup = 'Shops';
+
     protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema

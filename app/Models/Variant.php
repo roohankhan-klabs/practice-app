@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -15,14 +16,15 @@ use Illuminate\Support\Collection;
  * @property float $price
  * @property int $quantity
  * @property bool $is_active
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property-read \App\Models\Product $product
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Product $product
  */
 #[Fillable(['product_id', 'variant_option_ids', 'price', 'stock'])]
 class Variant extends Model
 {
     protected $appends = ['variant_options_summary'];
+
     protected function casts(): array
     {
         return [
@@ -62,7 +64,7 @@ class Variant extends Model
             ->with('variantType')
             ->whereIn('id', $variantOptionIds)
             ->get()
-            ->sortBy(fn(VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
+            ->sortBy(fn (VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
             ->values();
     }
 }

@@ -16,11 +16,12 @@ use Illuminate\Database\Eloquent\Model;
     'city_id',
     'state_id',
     'country_id',
-    'is_default'
+    'is_default',
 ])]
 class Address extends Model
 {
     use HasFactory;
+
     public function user()
     {
         return $this->belongsTo(User::class);

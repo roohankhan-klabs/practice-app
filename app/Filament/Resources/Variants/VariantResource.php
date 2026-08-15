@@ -9,8 +9,8 @@ use App\Filament\Resources\Variants\Pages\ViewVariant;
 use App\Filament\Resources\Variants\Schemas\VariantForm;
 use App\Filament\Resources\Variants\Schemas\VariantInfolist;
 use App\Filament\Resources\Variants\Tables\VariantsTable;
-use App\Models\VariantOption;
 use App\Models\Variant;
+use App\Models\VariantOption;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -24,6 +24,7 @@ class VariantResource extends Resource
     protected static ?string $model = Variant::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Bars3BottomLeft;
+
     protected static string|UnitEnum|null $navigationGroup = 'Products Catalog';
 
     public static function getGloballySearchableAttributes(): array

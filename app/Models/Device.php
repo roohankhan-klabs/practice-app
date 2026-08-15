@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_mobile
  * @property string $device_token
  * @property string $last_ip_address
- * @property \Carbon\Carbon $last_activity_at
+ * @property Carbon $last_activity_at
  */
 #[Fillable(
     [

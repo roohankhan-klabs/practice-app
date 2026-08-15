@@ -22,6 +22,7 @@ class SubCategoryResource extends Resource
     protected static ?string $model = SubCategory::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
+
     protected static string|UnitEnum|null $navigationGroup = 'Catalog';
 
     public static function form(Schema $schema): Schema

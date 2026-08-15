@@ -18,7 +18,9 @@ class SearchHistory extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function device(){
+
+    public function device()
+    {
         return $this->belongsTo(Device::class);
     }
 }

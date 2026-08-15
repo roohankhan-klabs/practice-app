@@ -22,7 +22,9 @@ class ShopStaffResource extends Resource
     protected static ?string $model = ShopStaff::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
+
     protected static string|UnitEnum|null $navigationGroup = 'Shops';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema

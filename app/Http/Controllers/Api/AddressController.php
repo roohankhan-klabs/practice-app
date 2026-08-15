@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\Controller;
 use App\Models\Address;
 use App\Services\AddressService;
 use Illuminate\Http\Request;
@@ -16,22 +15,25 @@ class AddressController extends Controller
     {
         $this->addressService = $addressService;
     }
+
     public function index(Request $request)
     {
         $addresses = $request->user()->addresses;
 
         return $this->formatResponse('Addresses fetched successfully', $addresses);
     }
+
     public function show(Request $request, int $addressId)
     {
         $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
-        if (!$address) {
+        if (! $address) {
             return $this->formatError('Address not found', 404);
         }
 
         return $this->formatResponse('Address fetched successfully', $address);
     }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -73,13 +75,14 @@ class AddressController extends Controller
 
         return $this->formatResponse('Address created successfully', $address);
     }
+
     public function update(Request $request, int $addressId)
     {
         $validated = $this->addressService->validateAddress($request);
 
         $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
-        if (!$address) {
+        if (! $address) {
             return $this->formatError('Address not found', 404);
         }
 
@@ -87,11 +90,12 @@ class AddressController extends Controller
 
         return $this->formatResponse('Address updated successfully', $address);
     }
+
     public function destroy(Request $request, int $addressId)
     {
         $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
-        if (!$address) {
+        if (! $address) {
             return $this->formatError('Address not found', 404);
         }
 

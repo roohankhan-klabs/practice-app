@@ -35,11 +35,12 @@ class AddressService
             'is_default' => 'required|boolean',
         ]);
     }
+
     public function findUserAddress(Request $request, int $addressId)
     {
         $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
-        if (!$address) {
+        if (! $address) {
             return null;
         }
 

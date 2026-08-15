@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     public const ACTIVE = 'active';
+
     public const INACTIVE = 'inactive';
 
     public function subcategories()

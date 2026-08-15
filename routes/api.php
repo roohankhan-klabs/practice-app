@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
-use App\Http\Controllers\Api\CityController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\WishlistController;
-use App\Http\Controllers\Api\CountryController;
-use App\Http\Controllers\Api\PaymentMethodController;
-use App\Http\Controllers\Api\StateController;
-use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentMethodController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\StateController;
+use App\Http\Controllers\Api\WishlistController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')->group(function () {
     // auth
@@ -73,5 +74,7 @@ Route::prefix('api/v1')->group(function () {
             Route::delete('/{cartItemId}', [CartController::class, 'destroy']);
             Route::delete('/clear', [CartController::class, 'clearCart']);
         });
+
+        Route::post('checkout', [OrderController::class, 'checkout']);
     });
 });

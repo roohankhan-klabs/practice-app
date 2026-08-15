@@ -12,6 +12,7 @@ abstract class Controller
             'data' => $data,
         ], $status);
     }
+
     public function formatError(string $message, int $status = 500, $errors = [])
     {
         return response()->json([

@@ -47,8 +47,7 @@ class ProductForm
                         Select::make('sub_category_id')
                             ->label('Sub Category')
                             ->relationship('subcategory', 'name')
-                            ->getOptionLabelFromRecordUsing(fn($record) =>
-                            $record ? $record->category->name . ' - ' . $record->name : null)
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record ? $record->category->name.' - '.$record->name : null)
                             ->searchable()
                             ->preload()
                             ->required(),
@@ -118,7 +117,7 @@ class ProductForm
                             ->label('Featured Product')
                             ->default(false),
                     ])
-                    ->columns(3)
+                    ->columns(3),
             ]);
     }
 }

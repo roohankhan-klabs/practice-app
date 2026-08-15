@@ -3,10 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Address;
-use App\Models\User;
 use App\Models\City;
-use App\Models\State;
 use App\Models\Country;
+use App\Models\State;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

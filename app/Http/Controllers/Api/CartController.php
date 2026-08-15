@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\Controller;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 
@@ -16,6 +14,7 @@ class CartController extends Controller
     {
         $this->cartService = $cartService;
     }
+
     // get cart
     public function index(Request $request)
     {
@@ -23,6 +22,7 @@ class CartController extends Controller
 
         return $this->formatResponse('Cart items fetched successfully', $cartItems);
     }
+
     // add to cart
     public function store(Request $request)
     {
@@ -36,6 +36,7 @@ class CartController extends Controller
 
         return $this->formatResponse('Item added to cart successfully', $cartItem);
     }
+
     // update cart item
     public function update(Request $request, int $cartItemId)
     {
@@ -47,6 +48,7 @@ class CartController extends Controller
 
         return $this->formatResponse('Cart item updated successfully', $cartItem);
     }
+
     // remove cart item
     public function destroy(Request $request, int $cartItemId)
     {
@@ -54,6 +56,7 @@ class CartController extends Controller
 
         return $this->formatResponse('Cart item removed successfully');
     }
+
     // clear cart
     public function clearCart(Request $request)
     {

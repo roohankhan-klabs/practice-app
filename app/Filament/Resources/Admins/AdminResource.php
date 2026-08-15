@@ -26,8 +26,11 @@ class AdminResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::AcademicCap;
 
     protected static string|UnitEnum|null $navigationGroup = 'Users';
-    protected static ?string $navigationLabel = "Admins";
+
+    protected static ?string $navigationLabel = 'Admins';
+
     protected static ?string $modelLabel = 'Admin';
+
     protected static ?string $pluralModelLabel = 'Admins';
 
     public static function getEloquentQuery(): Builder

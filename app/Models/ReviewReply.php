@@ -18,7 +18,9 @@ class ReviewReply extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function review(){
+
+    public function review()
+    {
         return $this->belongsTo(Review::class);
     }
 }

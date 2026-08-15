@@ -25,10 +25,10 @@ class ShopsTable
                 ImageColumn::make('logo'),
                 TextColumn::make('user.name')
                     ->sortable()
-                    ->url(fn(Shop $record) => UserResource::getUrl('view', ['record' => $record])),
+                    ->url(fn (Shop $record) => UserResource::getUrl('view', ['record' => $record])),
                 TextColumn::make('shop_name')
                     ->searchable()
-                    ->url(fn(Shop $record) => ShopResource::getUrl('view', ['record' => $record])),
+                    ->url(fn (Shop $record) => ShopResource::getUrl('view', ['record' => $record])),
                 TextColumn::make('whatsapp_number')
                     ->searchable(),
                 TextColumn::make('contact_number')
@@ -54,7 +54,7 @@ class ShopsTable
                 TextColumn::make('status')
                     ->badge()
                     ->color(
-                        fn(string $state): string => match ($state) {
+                        fn (string $state): string => match ($state) {
                             ShopStatus::Verified->value => 'success',
                             ShopStatus::Unverified->value => 'warning',
                             ShopStatus::Blocked->value => 'danger',
@@ -62,7 +62,7 @@ class ShopsTable
                         }
                     )
                     ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
+                        fn (string $state): string => match ($state) {
                             ShopStatus::Verified->value => 'Verified',
                             ShopStatus::Unverified->value => 'Unverified',
                             ShopStatus::Blocked->value => 'Blocked',

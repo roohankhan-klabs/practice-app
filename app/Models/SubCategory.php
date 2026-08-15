@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property unsignedInteger $sort_order
  * @property string $status
  */
-
 #[Fillable(
     [
         'category_id',
@@ -25,12 +24,15 @@ use Illuminate\Database\Eloquent\Model;
     ]
 )]
 
-class SubCategory extends Model {
-    public function category() {
+class SubCategory extends Model
+{
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function products() {
+    public function products()
+    {
         return $this->hasMany(Product::class);
     }
 }

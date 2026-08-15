@@ -22,6 +22,7 @@ class NotificationResource extends Resource
     protected static ?string $model = Notification::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Bell;
+
     protected static string|UnitEnum|null $navigationGroup = 'Settings';
 
     public static function form(Schema $schema): Schema

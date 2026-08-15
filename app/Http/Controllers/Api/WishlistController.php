@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\Controller;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
     private CartService $cartService;
+
     public function __construct(CartService $cartService)
     {
         $this->cartService = $cartService;
     }
+
     public function index(Request $request)
     {
         $wishlist = $request->user()->wishlist()->with('product');
 
         return $this->formatResponse('Wishlist fetched successfully', $wishlist);
     }
+
     public function convertToCart(Request $request)
     {
         $validated = $request->validate([
@@ -37,12 +39,15 @@ class WishlistController extends Controller
         $wishlist = $request->user()->wishlist()->where('product_id', $validated['product_id'])->first();
         if ($wishlist) {
             $wishlist->delete();
+
             return $this->formatResponse('Removed from wishlist successfully', $wishlist);
         } else {
             $wishlist = $request->user()->wishlist()->create($validated);
+
             return $this->formatResponse('Added to wishlist successfully', $wishlist);
         }
     }
+
     public function bulkDestroy(Request $request)
     {
         $validated = $request->validate([
@@ -56,6 +61,7 @@ class WishlistController extends Controller
             return $this->formatResponse('Wishlist not found', null, 404);
         }
         $wishlist->delete();
+
         return $this->formatResponse('Removed all items from wishlist successfully', $wishlist);
     }
 }

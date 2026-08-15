@@ -22,7 +22,8 @@ class ShopResource extends Resource
     protected static ?string $model = Shop::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingStorefront;
-    protected static string|UnitEnum|null $navigationGroup = "Shops";
+
+    protected static string|UnitEnum|null $navigationGroup = 'Shops';
 
     public static function form(Schema $schema): Schema
     {

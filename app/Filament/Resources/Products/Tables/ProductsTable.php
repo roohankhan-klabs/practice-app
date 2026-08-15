@@ -9,7 +9,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Support\View\Components\BadgeComponent;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -24,8 +23,7 @@ class ProductsTable
                     ->searchable()
                     ->sortable()
                     ->url(
-                        fn(Product $record): ?string =>
-                        $record->shop
+                        fn (Product $record): ?string => $record->shop
                             ? ShopResource::getUrl('view', [
                                 'record' => $record->shop,
                             ])
@@ -34,8 +32,7 @@ class ProductsTable
                 TextColumn::make('subcategory.name')
                     ->searchable()
                     ->url(
-                        fn(Product $record): ?string =>
-                        $record->subcategory
+                        fn (Product $record): ?string => $record->subcategory
                             ? SubCategoryResource::getUrl('view', [
                                 'record' => $record->subcategory,
                             ])
@@ -67,9 +64,9 @@ class ProductsTable
                     ->boolean(),
                 TextColumn::make('status')
                     ->badge()
-                    ->formatStateUsing(fn(string $state) => strtoupper($state))
+                    ->formatStateUsing(fn (string $state) => strtoupper($state))
                     ->color(
-                        fn(string $state): string => match ($state) {
+                        fn (string $state): string => match ($state) {
                             'active' => 'success',
                             'inactive' => 'danger',
                             default => 'secondary',

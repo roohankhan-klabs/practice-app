@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
  * @property int $user_id
  * @property int $product_id
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  */
 #[Fillable(['user_id', 'device_id', 'product_id'])]
 
@@ -20,10 +21,12 @@ class Wishlist extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function device()
     {
         return $this->belongsTo(DeviceUser::class);
     }
+
     public function product()
     {
         return $this->belongsTo(Product::class);

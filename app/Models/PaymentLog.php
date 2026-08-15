@@ -23,10 +23,13 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class PaymentLog extends Model
 {
-    public function payment(){
+    public function payment()
+    {
         return $this->belongsTo(Payment::class);
     }
-    public function order(){
+
+    public function order()
+    {
         return $this->belongsTo(Order::class);
     }
 }

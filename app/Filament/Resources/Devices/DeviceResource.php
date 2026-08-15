@@ -22,6 +22,7 @@ class DeviceResource extends Resource
     protected static ?string $model = Device::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DevicePhoneMobile;
+
     protected static string|UnitEnum|null $navigationGroup = 'Users';
 
     public static function form(Schema $schema): Schema

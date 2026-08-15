@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\PaymentMethod;
 use Illuminate\Database\Seeder;
 
-class PaymentMethodSeeder extends Seeder{
-    public function run(): void {
+class PaymentMethodSeeder extends Seeder
+{
+    public function run(): void
+    {
         $paymentMethods = [
             [
                 'name' => 'Visa',

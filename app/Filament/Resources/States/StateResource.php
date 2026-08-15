@@ -22,6 +22,7 @@ class StateResource extends Resource
     protected static ?string $model = State::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice2;
+
     protected static string|UnitEnum|null $navigationGroup = 'Locations';
 
     public static function form(Schema $schema): Schema

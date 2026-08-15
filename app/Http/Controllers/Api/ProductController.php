@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\Controller;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Review;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -18,6 +17,7 @@ class ProductController extends Controller
                 $variant->setRelation('variantOptions', $variant->variantOptions());
             });
         });
+
         return $this->formatResponse('Products fetched successfully', $products);
     }
 
@@ -27,9 +27,10 @@ class ProductController extends Controller
         $product->variants->each(function ($variant) {
             $variant->setRelation('variantOptions', $variant->variantOptions());
         });
-        if (!$product) {
+        if (! $product) {
             return $this->formatResponse('Product not found', null, 404);
         }
+
         return $this->formatResponse('Product fetched successfully', $product);
     }
 
@@ -40,7 +41,7 @@ class ProductController extends Controller
                 $hasOrdered = Order::whereHas('order_items', function ($query) use ($value) {
                     $query->where('product_id', $value);
                 })->where('user_id', $request->user()->id)->exists();
-                if (!$hasOrdered) {
+                if (! $hasOrdered) {
                     $fail('You have not ordered this product');
                 }
             }],
@@ -55,6 +56,7 @@ class ProductController extends Controller
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
         ]);
+
         return $this->formatResponse('Review added successfully', $review);
     }
 }

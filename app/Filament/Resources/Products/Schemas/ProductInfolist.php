@@ -18,18 +18,15 @@ class ProductInfolist
         return $schema
             ->components([
                 Section::make('Shop')->schema([
-                    TextEntry::make('shop.shop_name')->url(fn(Product $record) =>
-                    $record->shop ?
+                    TextEntry::make('shop.shop_name')->url(fn (Product $record) => $record->shop ?
                         ShopResource::getUrl('view', ['record' => $record->shop]) :
                         null),
                 ]),
                 Section::make('Category')->schema([
-                    TextEntry::make('subcategory.category.name')->url(fn(Product $record) =>
-                    $record->subcategory ?
+                    TextEntry::make('subcategory.category.name')->url(fn (Product $record) => $record->subcategory ?
                         CategoryResource::getUrl('view', ['record' => $record->subcategory->category]) :
                         null)->label('Category'),
-                    TextEntry::make('subcategory.name')->url(fn(Product $record) =>
-                    $record->subcategory ?
+                    TextEntry::make('subcategory.name')->url(fn (Product $record) => $record->subcategory ?
                         SubCategoryResource::getUrl('view', ['record' => $record->subcategory]) :
                         null)->label('Subcategory'),
                 ])->columns(2),
