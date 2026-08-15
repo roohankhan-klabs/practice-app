@@ -3,8 +3,42 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
+use App\Models\PaymentMethod;
+use App\Services\AddressService;
+use App\Services\CartService;
+use App\Services\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct(private OrderService $orderService, private CartService $cartService, private AddressService $addressService)
+    {
+        $this->orderService = $orderService;
+        $this->cartService = $cartService;
+        $this->addressService = $addressService;
+    }
+    public function checkout(Request $request)
+    {
+        $validated = $request->validate([
+            'address_id' => 'required|exists:addresses,id',
+            'payment_method_id' => 'required|exists:payment_methods,id',
+            'cart_item_ids' => 'required|array',
+            'cart_item_ids.*' => 'exists:cart_items,id',
+        ]);
+        $address = $this->addressService->findUserAddress($request, $validated['address_id']);
+        if (!$address) {
+            return $this->formatError('Address not found', 404);
+        }
+        $paymentMethod = PaymentMethod::where(['id', $validated['payment_method_id']], ['is_active', true])->first();
+        if (!$paymentMethod) {
+            return $this->formatError('Payment method not found', 404);
+        }
+        $cartItems = $this->cartService->getUserCartItems($request, $validated['cart_item_ids']);
+        if (empty($cartItems)) {
+            return $this->formatError('Cart items not found', 404);
+        }
+        $order = $this->orderService->placeOrder($request, $validated);
 
+        return $this->formatResponse('Order placed successfully', $order);
+    }
 }

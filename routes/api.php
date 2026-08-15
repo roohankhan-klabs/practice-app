@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SettingController;
 
 Route::prefix('api/v1')->group(function () {
@@ -31,7 +30,6 @@ Route::prefix('api/v1')->group(function () {
 
     // catalog
     Route::post('categories', [CategoryController::class, 'index']);
-    // Route::post('sub-categories', [SubCategoryController::class, 'index']);
 
     // settings
     Route::post('settings', [SettingController::class, 'index']);
@@ -66,7 +64,6 @@ Route::prefix('api/v1')->group(function () {
         Route::prefix('wishlist')->group(function () {
             Route::get('/', [WishlistController::class, 'index']);
             Route::post('/', [WishlistController::class, 'toggle']);
-            Route::delete('/{productId}', [WishlistController::class, 'destroy']);
             Route::delete('/clear', [WishlistController::class, 'bulkDestroy']);
         });
         Route::prefix('carts')->group(function () {

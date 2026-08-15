@@ -43,18 +43,6 @@ class WishlistController extends Controller
             return $this->formatResponse('Added to wishlist successfully', $wishlist);
         }
     }
-
-    public function destroy(Request $request, int $productId)
-    {
-        $wishlist = $request->user()->wishlist()
-            ->where('product_id', $productId)
-            ->first();
-        if (!$wishlist) {
-            return $this->formatResponse('Wishlist not found', null, 404);
-        }
-        $wishlist->delete();
-        return $this->formatResponse('Removed from wishlist successfully', $wishlist);
-    }
     public function bulkDestroy(Request $request)
     {
         $validated = $request->validate([
