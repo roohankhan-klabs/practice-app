@@ -15,10 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class Verification extends Model
 {
-    public const PENDING = 'pending';
-    public const VERIFIED = 'verified';
-    public const EXPIRED = 'expired';
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

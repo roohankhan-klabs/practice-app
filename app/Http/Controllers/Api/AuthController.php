@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\Status;
 use App\Http\Controllers\Api\Controller;
 use App\Models\Role;
-use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -46,7 +46,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'status_id' => Status::ACTIVE,
+            'status' => Status::Active,
             'role_id' => Role::CUSTOMER,
         ]);
 
@@ -132,7 +132,7 @@ class AuthController extends Controller
             'phone' => $user->phone,
             'email' => $user->email,
             'otp' => $otp,
-            'status' => Verification::PENDING,
+            'status' => Status::Pending,
         ]);
 
         return $this->formatResponse('OTP sent successfully');
@@ -153,7 +153,7 @@ class AuthController extends Controller
 
         $verification = Verification::where('user_id', $user->id)
             ->where('otp', $validated['otp'])
-            ->where('status', Verification::PENDING)
+            ->where('status', Status::Pending)
             ->first();
 
         if (!$verification) {
@@ -161,13 +161,13 @@ class AuthController extends Controller
         }
         if ($verification->created_at < now()->subMinutes(5)) {
             $verification->update([
-                'status' => Verification::EXPIRED,
+                'status' => Status::Expired,
             ]);
             return $this->formatError('OTP expired', 401);
         }
 
         $verification->update([
-            'status' => Verification::VERIFIED,
+            'status' => Status::Verified,
         ]);
 
         return $this->formatResponse('OTP verified successfully', [
@@ -212,7 +212,7 @@ class AuthController extends Controller
 
         $verification = Verification::where('user_id', $user->id)
             ->where('otp', $validated['otp'])
-            ->where('status', Verification::VERIFIED)
+            ->where('status', Status::Verified)
             ->first();
 
         if (!$verification) {

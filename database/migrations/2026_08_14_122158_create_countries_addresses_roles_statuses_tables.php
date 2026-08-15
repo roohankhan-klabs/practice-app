@@ -28,7 +28,8 @@ return new class extends Migration
         });
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('shop_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('address_line_1');
             $table->string('address_line_2')->nullable();
             $table->string('preffered_contact_number')->nullable();
@@ -44,11 +45,6 @@ return new class extends Migration
             $table->string('name');
             $table->timestamps();
         });
-        Schema::create('statuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -59,6 +55,5 @@ return new class extends Migration
         Schema::dropIfExists('countries');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('statuses');
     }
 };

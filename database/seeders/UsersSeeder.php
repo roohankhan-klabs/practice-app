@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
             'email' => 'super@admin.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 1,
         ]);
         User::create([
@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 2,
         ]);
         User::create([
@@ -35,7 +35,7 @@ class UsersSeeder extends Seeder
             'email' => 'customer1@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 3,
         ]);
         User::create([
@@ -43,7 +43,7 @@ class UsersSeeder extends Seeder
             'email' => 'customer2@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 3,
         ]);
         User::create([
@@ -51,7 +51,7 @@ class UsersSeeder extends Seeder
             'email' => 'customer3@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 3,
         ]);
         User::create([
@@ -59,7 +59,7 @@ class UsersSeeder extends Seeder
             'email' => 'customer4@gmail.com',
             'password' => Hash::make('password'),
             'phone' => '1234567890',
-            'status_id' => 1,
+            'status' => 'active',
             'role_id' => 3,
         ]);
     }

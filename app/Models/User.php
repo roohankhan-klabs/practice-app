@@ -34,7 +34,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read Collection<int, Membership> $teamMemberships
  * @property-read Collection<int, Team> $teams
  */
-#[Fillable(['name', 'email', 'phone', 'password', 'current_team_id', 'role_id', 'status_id', 'address_id'])]
+#[Fillable(['name', 'email', 'phone', 'password', 'current_team_id', 'role_id', 'status', 'address_id'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
@@ -53,15 +53,14 @@ class User extends Authenticatable implements PasskeyUser
             'password' => 'hashed',
         ];
     }
+    public function devices()
+    {
+        return $this->hasMany(DeviceUser::class);
+    }
 
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }
-
-    public function status()
-    {
-        return $this->belongsTo(Status::class);
     }
 
     public function addresses()

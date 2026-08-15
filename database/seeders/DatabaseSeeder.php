@@ -19,9 +19,9 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
             CitySeeder::class,
             RoleSeeder::class,
-            StatusSeeder::class,
             UsersSeeder::class,
             AddressSeeder::class,
+            PaymentMethodSeeder::class,
         ]);
     }
 }
