@@ -15,9 +15,12 @@ class VariantsTable
     {
         return $table
             ->columns([
-                TextColumn::make('product_id')
-                    ->numeric()
+                TextColumn::make('product.name')
+                    ->label('Product')
                     ->sortable(),
+                TextColumn::make('variant_options_summary')
+                    ->label('Options')
+                    ->wrap(),
                 TextColumn::make('price')
                     ->money()
                     ->sortable(),

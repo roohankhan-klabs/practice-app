@@ -11,9 +11,10 @@ class VariantInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('product_id')
-                    ->numeric(),
-                TextEntry::make('variant_option_ids'),
+                TextEntry::make('product.name')
+                    ->label('Product'),
+                TextEntry::make('variant_options_summary')
+                    ->label('Options'),
                 TextEntry::make('price')
                     ->money(),
                 TextEntry::make('stock')

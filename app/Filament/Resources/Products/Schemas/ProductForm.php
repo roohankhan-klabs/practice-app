@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use App\Enums\ProductStatus;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -32,7 +33,7 @@ class ProductForm
                             ->rows(5)
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columnSpanFull(),
 
                 Section::make('Classification')
                     ->schema([
@@ -46,8 +47,15 @@ class ProductForm
                         Select::make('sub_category_id')
                             ->label('Sub Category')
                             ->relationship('subcategory', 'name')
+                            ->getOptionLabelFromRecordUsing(fn($record) =>
+                            $record ? $record->category->name . ' - ' . $record->name : null)
                             ->searchable()
                             ->preload()
+                            ->required(),
+
+                        Select::make('status')
+                            ->options(ProductStatus::class)
+                            ->default(ProductStatus::Pending)
                             ->required(),
                     ])
                     ->columns(2),
@@ -109,17 +117,8 @@ class ProductForm
                         Toggle::make('is_featured')
                             ->label('Featured Product')
                             ->default(false),
-
-                        Select::make('status')
-                            ->options([
-                                'pending' => 'Pending',
-                                'approved' => 'Approved',
-                                'rejected' => 'Rejected',
-                            ])
-                            ->default('pending')
-                            ->required(),
                     ])
-                    ->columns(2)
+                    ->columns(3)
             ]);
     }
 }
