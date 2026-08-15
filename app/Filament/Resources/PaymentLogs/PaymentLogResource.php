@@ -15,12 +15,15 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PaymentLogResource extends Resource
 {
     protected static ?string $model = PaymentLog::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Square3Stack3d;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Payments';
 
     public static function form(Schema $schema): Schema
     {
