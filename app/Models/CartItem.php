@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(
     [
@@ -15,13 +16,27 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class CartItem extends Model
 {
-    public function cart()
+    /**
+     * @return BelongsTo<Cart, CartItem>
+     */
+    public function cart(): BelongsTo
     {
         return $this->belongsTo(Cart::class);
     }
 
-    public function product()
+    /**
+     * @return BelongsTo<Product, CartItem>
+     */
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * @return BelongsTo<Variant, CartItem>
+     */
+    public function variant(): BelongsTo
+    {
+        return $this->belongsTo(Variant::class);
     }
 }

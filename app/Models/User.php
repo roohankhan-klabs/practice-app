@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -39,7 +41,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasTeams, Notifiable, PasskeyAuthenticatable, HasApiTokens;
+    use HasApiTokens, HasFactory, HasTeams, Notifiable, PasskeyAuthenticatable;
 
     /**
      * Get the attributes that should be cast.
@@ -53,6 +55,7 @@ class User extends Authenticatable implements PasskeyUser
             'password' => 'hashed',
         ];
     }
+
     public function devices()
     {
         return $this->hasMany(DeviceUser::class);
@@ -72,10 +75,30 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasOne(Address::class)->where('is_default', true);
     }
-    public function shop(){
+
+    public function shop()
+    {
         return $this->hasOne(Shop::class);
     }
-    public function wishlist(){
+
+    public function wishlist()
+    {
         return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * @return HasOne<Cart, User>
+     */
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    /**
+     * @return HasManyThrough<CartItem, Cart, User>
+     */
+    public function cartItems(): HasManyThrough
+    {
+        return $this->hasManyThrough(CartItem::class, Cart::class);
     }
 }
