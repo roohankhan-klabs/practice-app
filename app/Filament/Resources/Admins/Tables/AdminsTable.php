@@ -8,7 +8,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class AdminsTable
@@ -19,9 +18,7 @@ class AdminsTable
             ->columns([
                 //
             ])
-            ->filters([
-                TrashedFilter::make(),
-            ])
+            ->filters([])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),

@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -24,6 +25,26 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->navigationGroups(
+                [
+                    NavigationGroup::make()
+                        ->label('Users'),
+                    NavigationGroup::make()
+                        ->label('Shops'),
+                    NavigationGroup::make()
+                        ->label('Catalog'),
+                    NavigationGroup::make()
+                        ->label('Products Catalog'),
+                    NavigationGroup::make()
+                        ->label('Orders Management'),
+                    NavigationGroup::make()
+                        ->label('Payments'),
+                    NavigationGroup::make()
+                        ->label('Locations'),
+                    NavigationGroup::make()
+                        ->label('Settings'),
+                ]
+            )
             ->default()
             ->id('admin')
             ->path('admin')

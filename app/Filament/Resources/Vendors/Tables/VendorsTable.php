@@ -8,7 +8,6 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class VendorsTable
@@ -20,7 +19,6 @@ class VendorsTable
                 //
             ])
             ->filters([
-                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),

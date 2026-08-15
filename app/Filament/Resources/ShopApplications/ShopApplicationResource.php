@@ -23,6 +23,7 @@ class ShopApplicationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentChartBar;
     protected static string|UnitEnum|null $navigationGroup = 'Shops';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
