@@ -85,5 +85,6 @@ return new class extends Migration
         Schema::dropIfExists('countries');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('roles');
+        Schema::dropIfExists('shops');
     }
 };

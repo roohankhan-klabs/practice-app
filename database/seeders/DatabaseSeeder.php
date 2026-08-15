@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\VariantType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,6 +26,7 @@ class DatabaseSeeder extends Seeder
             VariantOptionSeeder::class,
             CategorySeeder::class,
             SubCategorySeeder::class,
+            DemoCommerceSeeder::class,
         ]);
     }
 }

@@ -70,7 +70,10 @@ class VariantTypeSeeder extends Seeder
             ]
         ];
         foreach ($variantTypes as $variantType) {
-            VariantType::create($variantType);
+            VariantType::query()->updateOrCreate(
+                ['key' => $variantType['key']],
+                $variantType,
+            );
         }
     }
 }

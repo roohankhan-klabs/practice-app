@@ -284,20 +284,20 @@ return new class extends Migration
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('notifications');
         Schema::dropIfExists('payment_logs');
-        Schema::dropIfExists('payments');
-        Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('wishlists');
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
+        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('cart_items');
         Schema::dropIfExists('carts');
         Schema::dropIfExists('product_images');
+        Schema::dropIfExists('variants');
         Schema::dropIfExists('products');
         Schema::dropIfExists('sub_categories');
         Schema::dropIfExists('categories');
         Schema::dropIfExists('shop_applications');
         Schema::dropIfExists('shop_staff');
-        Schema::dropIfExists('shops');
         Schema::dropIfExists('device_users');
         Schema::dropIfExists('devices');
     }

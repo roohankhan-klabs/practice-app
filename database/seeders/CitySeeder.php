@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
+use Illuminate\Database\Seeder;
+
 class CitySeeder extends Seeder
 {
     /**
@@ -11,25 +14,28 @@ class CitySeeder extends Seeder
      */
     public function run(): void
     {
-        City::create([
-            'name' => 'New York',
-            'state_id' => 1,
-            'country_id' => 1,
-        ]);
-        City::create([
-            'name' => 'Toronto',
-            'state_id' => 2,
-            'country_id' => 2,
-        ]);
-        City::create([
-            'name' => 'Karachi',
-            'state_id' => 3,
-            'country_id' => 3,
-        ]);
-        City::create([
-            'name' => 'Manama',
-            'state_id' => 4,
-            'country_id' => 4,
-        ]);
+        $cities = [
+            ['country_code' => 'US', 'state' => 'California', 'name' => 'Los Angeles'],
+            ['country_code' => 'CA', 'state' => 'Alberta', 'name' => 'Calgary'],
+            ['country_code' => 'PK', 'state' => 'Sindh', 'name' => 'Karachi'],
+            ['country_code' => 'BH', 'state' => 'Capital Governorate', 'name' => 'Manama'],
+        ];
+
+        foreach ($cities as $city) {
+            $country = Country::query()->where('code', $city['country_code'])->firstOrFail();
+            $state = State::query()
+                ->where('country_id', $country->id)
+                ->where('name', $city['state'])
+                ->firstOrFail();
+
+            City::query()->updateOrCreate(
+                [
+                    'state_id' => $state->id,
+                    'country_id' => $country->id,
+                    'name' => $city['name'],
+                ],
+                ['name' => $city['name']],
+            );
+        }
     }
 }

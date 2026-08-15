@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
         'name',
         'slug',
         'description',
-        'specification',
+        'specifications',
         'price',
         'shipping_price',
         'stock',
@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
         'is_featured',
         'status',
         'reviewed_by',
+        'reviewed_at',
         'rejection_reason',
     ]
 )]
@@ -63,4 +64,3 @@ class Product extends Model
         return $this->hasMany(Variant::class);
     }
 }
-
