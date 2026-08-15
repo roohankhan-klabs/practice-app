@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\WishlistController;
@@ -44,7 +45,6 @@ Route::prefix('api/v1')->group(function () {
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::get('/{id}', [ProductController::class, 'show']);
-        Route::post('/{id}/review', [ProductController::class, 'review']);
     });
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -53,6 +53,8 @@ Route::prefix('api/v1')->group(function () {
         Route::post('profile', [AuthController::class, 'profile']);
         Route::post('update-profile', [AuthController::class, 'updateProfile']);
         Route::post('change-password', [AuthController::class, 'changePassword']);
+
+        Route::post('/review', [ProductController::class, 'review']);
 
         Route::prefix('address')->group(function () {
             Route::get('/', [AddressController::class, 'index']);
@@ -66,6 +68,13 @@ Route::prefix('api/v1')->group(function () {
             Route::post('/', [WishlistController::class, 'toggle']);
             Route::delete('/{id}', [WishlistController::class, 'destroy']);
             Route::delete('/clear', [WishlistController::class, 'bulkDestroy']);
+        });
+        Route::prefix('carts')->group(function () {
+            Route::get('/', [CartController::class, 'index']);
+            Route::post('/', [CartController::class, 'store']);
+            Route::post('/{id}', [CartController::class, 'update']);
+            Route::delete('/{id}', [CartController::class, 'destroy']);
+            Route::delete('/clear', [CartController::class, 'clearCart']);
         });
     });
 });

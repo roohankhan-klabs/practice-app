@@ -22,6 +22,7 @@ use Illuminate\Support\Collection;
 #[Fillable(['product_id', 'variant_option_ids', 'price', 'stock'])]
 class Variant extends Model
 {
+    protected $appends = ['variant_options_summary'];
     protected function casts(): array
     {
         return [
@@ -61,7 +62,7 @@ class Variant extends Model
             ->with('variantType')
             ->whereIn('id', $variantOptionIds)
             ->get()
-            ->sortBy(fn (VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
+            ->sortBy(fn(VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
             ->values();
     }
 }

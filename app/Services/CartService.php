@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use Illuminate\Http\Request;
+use App\Models\CartItem;
+use App\Models\Product;
+use Illuminate\Validation\ValidationException;
 
 class CartService
 {
@@ -11,39 +14,50 @@ class CartService
         return $request->user()->cartItems;
     }
 
-    public function validateAddToCart(Request $request)
+    public function addItemToCart(Request $request, array $validated): CartItem
     {
-        return $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-    }
+        $existingCartItem = CartItem::where('user_id', $request->user()->id)
+            ->where('product_id', $validated['product_id'])
+            ->where('variant_id', $validated['variant_id'] ?? null)
+            ->first();
 
-    public function addItemToCart(Request $request, array $validated): \App\Models\CartItem
-    {
-        $cartItem = \App\Models\CartItem::create([
+        if ($existingCartItem) {
+            $existingCartItem->update([
+                'quantity' => $existingCartItem->quantity + $validated['quantity'],
+            ]);
+
+            return $existingCartItem;
+        }
+
+        $product = Product::find($validated['product_id']);
+
+        if ($product->variants()->exists() && !$validated['variant_id']) {
+            throw ValidationException::withMessages([
+                'variant_id' => 'Variant is required',
+            ]);
+        }
+
+        if ($validated['variant_id'] && !$product->variants()->where('id', $validated['variant_id'])->exists()) {
+            throw ValidationException::withMessages([
+                'variant_id' => 'Variant not found',
+            ]);
+        }
+
+        $cartItem = CartItem::create([
             'user_id' => $request->user()->id,
             'product_id' => $validated['product_id'],
+            'variant_id' => $validated['variant_id'] ?? null,
             'quantity' => $validated['quantity'],
         ]);
 
         return $cartItem;
     }
 
-    public function validateUpdateCartItem(Request $request)
+    public function updateCartItem(Request $request, int $id, array $validated): CartItem
     {
-        return $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
-    }
-
-    public function updateCartItem(Request $request, int $id, array $validated): \App\Models\CartItem
-    {
-        $cartItem = \App\Models\CartItem::where('user_id', $request->user()->id)->where('id', $id)->first();
-
-        if (!$cartItem) {
-            throw new \Exception('Cart item not found');
-        }
+        $cartItem = CartItem::where('user_id', $request->user()->id)
+            ->where('id', $id)
+            ->firstOrFail();
 
         $cartItem->update($validated);
 
@@ -52,17 +66,16 @@ class CartService
 
     public function removeItemFromCart(Request $request, int $id): void
     {
-        $cartItem = \App\Models\CartItem::where('user_id', $request->user()->id)->where('id', $id)->first();
-
-        if (!$cartItem) {
-            throw new \Exception('Cart item not found');
-        }
+        $cartItem = CartItem::where('user_id', $request->user()->id)
+            ->where('id', $id)
+            ->firstOrFail();
 
         $cartItem->delete();
     }
 
     public function clearCart(Request $request): void
     {
-        \App\Models\CartItem::where('user_id', $request->user()->id)->delete();
+        CartItem::where('user_id', $request->user()->id)->delete();
     }
 }
+
