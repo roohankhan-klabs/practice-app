@@ -10,13 +10,13 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::where('is_active', 1)->with('subcategories')->get();
+        $categories = Category::with('subcategories.products')->get();
         return $this->formatResponse('Categories fetched successfully', $categories);
     }
 
     public function show(Request $request, $id)
     {
-        $category = Category::where('is_active', 1)->where('id', $id)->with('subcategories')->first();
+        $category = Category::where('id', $id)->with('subcategories.products')->first();
         return $this->formatResponse('Category fetched successfully', $category);
     }
 }

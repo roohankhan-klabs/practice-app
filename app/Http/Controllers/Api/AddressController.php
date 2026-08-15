@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
 use App\Models\Address;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\State;
+use App\Services\AddressService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class AddressController extends Controller
 {
+    private AddressService $addressService;
+
+    public function __construct(AddressService $addressService)
+    {
+        $this->addressService = $addressService;
+    }
     public function index(Request $request)
     {
         $addresses = $request->user()->addresses;
@@ -30,29 +33,7 @@ class AddressController extends Controller
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'address_line_1' => 'required',
-            'address_line_2' => 'nullable',
-            'preffered_contact_number' => 'required',
-            'postal_code' => 'nullable',
-            'city_id' => [
-                'required',
-                Rule::exists('cities', 'id')->where(function ($query) use ($request) {
-                    $query->where('state_id', $request->state_id);
-                }),
-            ],
-            'state_id' => [
-                'required',
-                Rule::exists('states', 'id')->where(function ($query) use ($request) {
-                    $query->where('country_id', $request->country_id);
-                }),
-            ],
-            'country_id' => [
-                'required',
-                Rule::exists('countries', 'id'),
-            ],
-            'is_default' => 'required|boolean',
-        ]);
+        $validated = $this->addressService->validateAddress($request);
 
         $address = Address::create([
             'user_id' => $request->user()->id,
@@ -70,30 +51,7 @@ class AddressController extends Controller
     }
     public function update(Request $request, int $id)
     {
-        $validated = $request->validate([
-            'address_line_1' => 'required',
-            'address_line_2' => 'nullable',
-            'preffered_contact_number' => 'required',
-            'postal_code' => 'nullable',
-            'city_id' => [
-                'required',
-                Rule::exists('cities', 'id')->where(function ($query) use ($request) {
-                    $query->where('state_id', $request->state_id);
-                }),
-            ],
-            'state_id' => [
-                'required',
-                Rule::exists('states', 'id')
-                    ->where(function ($query) use ($request) {
-                        $query->where('country_id', $request->country_id);
-                    }),
-            ],
-            'country_id' => [
-                'required',
-                Rule::exists('countries', 'id'),
-            ],
-            'is_default' => 'required|boolean',
-        ]);
+        $validated = $this->addressService->validateAddress($request);
 
         $address = Address::where('user_id', $request->user()->id)->where('id', $id)->first();
 

@@ -7,10 +7,15 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\StateController;
 use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\SubCategoryController;
+use App\Http\Controllers\Api\SettingController;
 
 Route::prefix('api/v1')->group(function () {
+    // auth
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::post('send-otp', [AuthController::class, 'sendOtp']);
@@ -18,11 +23,32 @@ Route::prefix('api/v1')->group(function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
+    // general
     Route::get('/cities/{stateId}', [CityController::class, 'cities']);
     Route::get('/states/{countryId}', [StateController::class, 'states']);
     Route::get('/countries', [CountryController::class, 'countries']);
 
+    // catalog
+    Route::post('categories', [CategoryController::class, 'index']);
+    // Route::post('sub-categories', [SubCategoryController::class, 'index']);
+
+    // settings
+    Route::post('settings', [SettingController::class, 'index']);
+    Route::get('/payment-methods', [PaymentMethodController::class, 'index']);
+
+    Route::prefix('shop')->group(function () {
+        Route::get('/', [ShopController::class, 'index']);
+        Route::get('/{id}', [ShopController::class, 'show']);
+    });
+
+    Route::prefix('product')->group(function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::get('/{id}', [ProductController::class, 'show']);
+        Route::post('/{id}/review', [ProductController::class, 'review']);
+    });
+
     Route::middleware('auth:sanctum')->group(function () {
+        // user
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('profile', [AuthController::class, 'profile']);
         Route::post('update-profile', [AuthController::class, 'updateProfile']);
@@ -35,16 +61,7 @@ Route::prefix('api/v1')->group(function () {
             Route::post('/{id}', [AddressController::class, 'update']);
             Route::delete('/{id}', [AddressController::class, 'destroy']);
         });
-        Route::prefix('shop')->group(function(){
-            Route::get('/', [ShopController::class, 'index']);
-            Route::get('/{id}', [ShopController::class, 'show']);
-        });
-        Route::prefix('product')->group(function(){
-            Route::get('/', [ProductController::class, 'index']);
-            Route::get('/{id}', [ProductController::class, 'show']);
-            Route::post('/{id}/review', [ProductController::class, 'review']);
-        });
-        Route::prefix('wishlist')->group(function(){
+        Route::prefix('wishlist')->group(function () {
             Route::get('/', [WishlistController::class, 'index']);
             Route::post('/', [WishlistController::class, 'toggle']);
             Route::delete('/{id}', [WishlistController::class, 'destroy']);

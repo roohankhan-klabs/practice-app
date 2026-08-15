@@ -25,7 +25,6 @@ class AdminResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::AcademicCap;
 
-    protected static ?string $recordTitleAttribute = 'name';
     protected static string|UnitEnum|null $navigationGroup = 'Users';
     protected static ?string $navigationLabel = "Admins";
     protected static ?string $modelLabel = 'Admin';

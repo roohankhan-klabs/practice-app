@@ -45,9 +45,9 @@ class Product extends Model
         return $this->belongsTo(Shop::class);
     }
 
-    public function category()
+    public function subcategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(SubCategory::class);
     }
     public function reviews()
     {
