@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 
@@ -35,20 +37,20 @@ class CartController extends Controller
         return $this->formatResponse('Item added to cart successfully', $cartItem);
     }
     // update cart item
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $cartItemId)
     {
         $validated = $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $cartItem = $this->cartService->updateCartItem($request, $id, $validated);
+        $cartItem = $this->cartService->updateCartItem($request, $cartItemId, $validated);
 
         return $this->formatResponse('Cart item updated successfully', $cartItem);
     }
     // remove cart item
-    public function destroy(Request $request, int $id)
+    public function destroy(Request $request, int $cartItemId)
     {
-        $this->cartService->removeItemFromCart($request, $id);
+        $this->cartService->removeItemFromCart($request, $cartItemId);
 
         return $this->formatResponse('Cart item removed successfully');
     }

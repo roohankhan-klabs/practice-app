@@ -12,9 +12,9 @@ class ShopController extends Controller
         $shops = Shop::all();
         return $this->formatResponse('Shops fetched successfully', $shops);
     }
-    public function show(Request $request, $id)
+    public function show(Request $request, int $shopId)
     {
-        $shop = Shop::findOrFail($id);
+        $shop = Shop::findOrFail($shopId);
         return $this->formatResponse('Shop fetched successfully', $shop);
     }
 }

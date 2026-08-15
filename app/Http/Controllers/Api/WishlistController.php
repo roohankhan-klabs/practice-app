@@ -44,10 +44,10 @@ class WishlistController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, int $productId)
     {
         $wishlist = $request->user()->wishlist()
-            ->where('product_id', $request->product_id)
+            ->where('product_id', $productId)
             ->first();
         if (!$wishlist) {
             return $this->formatResponse('Wishlist not found', null, 404);

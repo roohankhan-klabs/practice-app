@@ -21,9 +21,9 @@ class AddressController extends Controller
 
         return $this->formatResponse('Addresses fetched successfully', $addresses);
     }
-    public function show(Request $request, int $id)
+    public function show(Request $request, int $addressId)
     {
-        $address = Address::where('user_id', $request->user()->id)->where('id', $id)->first();
+        $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
         if (!$address) {
             return $this->formatError('Address not found', 404);
@@ -49,11 +49,11 @@ class AddressController extends Controller
 
         return $this->formatResponse('Address created successfully', $address);
     }
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $addressId)
     {
         $validated = $this->addressService->validateAddress($request);
 
-        $address = Address::where('user_id', $request->user()->id)->where('id', $id)->first();
+        $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
         if (!$address) {
             return $this->formatError('Address not found', 404);
@@ -63,9 +63,9 @@ class AddressController extends Controller
 
         return $this->formatResponse('Address updated successfully', $address);
     }
-    public function destroy(Request $request, int $id)
+    public function destroy(Request $request, int $addressId)
     {
-        $address = Address::where('user_id', $request->user()->id)->where('id', $id)->first();
+        $address = Address::where('user_id', $request->user()->id)->where('id', $addressId)->first();
 
         if (!$address) {
             return $this->formatError('Address not found', 404);

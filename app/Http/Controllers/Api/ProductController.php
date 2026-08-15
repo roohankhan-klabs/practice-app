@@ -21,9 +21,9 @@ class ProductController extends Controller
         return $this->formatResponse('Products fetched successfully', $products);
     }
 
-    public function show(Request $request, int $id)
+    public function show(Request $request, int $productId)
     {
-        $product = Product::with('images', 'variants', 'reviews')->where('id', $id)->first();
+        $product = Product::with('images', 'variants', 'reviews')->where('id', $productId)->first();
         $product->variants->each(function ($variant) {
             $variant->setRelation('variantOptions', $variant->variantOptions());
         });

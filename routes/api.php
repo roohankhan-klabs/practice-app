@@ -39,12 +39,12 @@ Route::prefix('api/v1')->group(function () {
 
     Route::prefix('shop')->group(function () {
         Route::get('/', [ShopController::class, 'index']);
-        Route::get('/{id}', [ShopController::class, 'show']);
+        Route::get('/{shopId}', [ShopController::class, 'show']);
     });
 
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
-        Route::get('/{id}', [ProductController::class, 'show']);
+        Route::get('/{productId}', [ProductController::class, 'show']);
     });
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -59,21 +59,21 @@ Route::prefix('api/v1')->group(function () {
         Route::prefix('address')->group(function () {
             Route::get('/', [AddressController::class, 'index']);
             Route::post('/', [AddressController::class, 'store']);
-            Route::get('/{id}', [AddressController::class, 'show']);
-            Route::post('/{id}', [AddressController::class, 'update']);
-            Route::delete('/{id}', [AddressController::class, 'destroy']);
+            Route::get('/{addressId}', [AddressController::class, 'show']);
+            Route::post('/{addressId}', [AddressController::class, 'update']);
+            Route::delete('/{addressId}', [AddressController::class, 'destroy']);
         });
         Route::prefix('wishlist')->group(function () {
             Route::get('/', [WishlistController::class, 'index']);
             Route::post('/', [WishlistController::class, 'toggle']);
-            Route::delete('/{id}', [WishlistController::class, 'destroy']);
+            Route::delete('/{productId}', [WishlistController::class, 'destroy']);
             Route::delete('/clear', [WishlistController::class, 'bulkDestroy']);
         });
         Route::prefix('carts')->group(function () {
             Route::get('/', [CartController::class, 'index']);
             Route::post('/', [CartController::class, 'store']);
-            Route::post('/{id}', [CartController::class, 'update']);
-            Route::delete('/{id}', [CartController::class, 'destroy']);
+            Route::post('/{cartItemId}', [CartController::class, 'update']);
+            Route::delete('/{cartItemId}', [CartController::class, 'destroy']);
             Route::delete('/clear', [CartController::class, 'clearCart']);
         });
     });
