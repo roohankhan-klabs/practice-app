@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone')->nullable()->after('email');
-            $table->string('status');
-            $table->string('role_id');
+            $table->string('status')->default('active');
+            $table->string('role_id')->default('3');
         });
     }
 
