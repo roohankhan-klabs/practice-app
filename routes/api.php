@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\WishlistController;
 
 Route::prefix('api/v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -28,6 +30,16 @@ Route::prefix('api/v1')->group(function () {
             Route::post('/{id}', [AddressController::class, 'show']);
             Route::put('/{id}', [AddressController::class, 'update']);
             Route::delete('/{id}', [AddressController::class, 'destroy']);
+        });
+        Route::prefix('product')->group(function(){
+            Route::get('/', [ProductController::class, 'index']);
+            Route::get('/{id}', [ProductController::class, 'show']);
+            Route::post('/{id}/review', [ProductController::class, 'review']);
+        });
+        Route::prefix('wishlist')->group(function(){
+            Route::get('/', [WishlistController::class, 'index']);
+            Route::post('/', [WishlistController::class, 'store']);
+            Route::delete('/{id}', [WishlistController::class, 'destroy']);
         });
     });
 });

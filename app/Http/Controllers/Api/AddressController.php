@@ -117,22 +117,4 @@ class AddressController extends Controller
 
         return $this->formatResponse('Address deleted successfully');
     }
-    public function cities(int $stateId)
-    {
-        $cities = City::where('state_id', $stateId)->get();
-
-        return $this->formatResponse('Cities fetched successfully', $cities);
-    }
-    public function states(int $countryId)
-    {
-        $states = State::where('country_id', $countryId)->get();
-
-        return $this->formatResponse('States fetched successfully', $states);
-    }
-    public function countries()
-    {
-        $countries = Country::get();
-
-        return $this->formatResponse('Countries fetched successfully', $countries);
-    }
 }

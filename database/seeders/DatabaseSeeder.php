@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\VariantType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             AddressSeeder::class,
             PaymentMethodSeeder::class,
+            VariantTypeSeeder::class,
+            VariantOptionSeeder::class,
         ]);
     }
 }

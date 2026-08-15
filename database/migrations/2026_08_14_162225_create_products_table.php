@@ -108,6 +108,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->json('values');
+            $table->unsignedInteger('price');
+            $table->unsignedInteger('stock');
             $table->timestamps();
         });
         Schema::create('carts', function (Blueprint $table) {
@@ -180,7 +182,6 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('device_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('variant_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::create('payment_logs', function (Blueprint $table) {
@@ -263,7 +264,7 @@ return new class extends Migration
             $table->foreignId('variant_type_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('value');
-            $table->string('hex_code');
+            $table->string('hex_code')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
