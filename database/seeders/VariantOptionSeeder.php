@@ -179,6 +179,9 @@ class VariantOptionSeeder extends Seeder
             ]
         ];
         foreach($variantOptions as $variantOption){
+            if (!isset($variantOption['value'])) {
+                $variantOption['value'] = strtolower($variantOption['name']);
+            }
             VariantOption::create($variantOption);
         }
     }

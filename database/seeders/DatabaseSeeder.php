@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             PaymentMethodSeeder::class,
             VariantTypeSeeder::class,
             VariantOptionSeeder::class,
+            CategorySeeder::class,
+            SubCategorySeeder::class,
         ]);
     }
 }

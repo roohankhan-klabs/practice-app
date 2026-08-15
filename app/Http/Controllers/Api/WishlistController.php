@@ -14,15 +14,19 @@ class WishlistController extends Controller
         return $this->formatResponse('Wishlist fetched successfully', $wishlist);
     }
 
-    public function store(Request $request)
+    public function toggle(Request $request)
     {
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
-
-        $wishlist = $request->user()->wishlist()->create($validated);
-
-        return $this->formatResponse('Wishlist created successfully', $wishlist);
+        $wishlist = $request->user()->wishlist()->where('product_id', $validated['product_id'])->first();
+        if ($wishlist) {
+            $wishlist->delete();
+            return $this->formatResponse('Removed from wishlist successfully', $wishlist);
+        } else {
+            $wishlist = $request->user()->wishlist()->create($validated);
+            return $this->formatResponse('Added to wishlist successfully', $wishlist);
+        }
     }
 
     public function destroy(Request $request)
