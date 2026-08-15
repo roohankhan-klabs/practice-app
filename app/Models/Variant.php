@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
@@ -19,11 +18,23 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \App\Models\Product $product
  */
-#[Fillable(['product_id', 'values', 'price', 'stock'])]
+#[Fillable(['product_id', 'variant_option_ids', 'price', 'stock'])]
 class Variant extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'variant_option_ids' => 'array',
+        ];
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function variantoptions()
+    {
+        return $this->belongsToMany(VariantOption::class, 'variant_option_ids');
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Review;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Variant;
+use App\Models\VariantOption;
 use App\Models\Wishlist;
 use Database\Seeders\DatabaseSeeder;
 
@@ -52,4 +53,28 @@ test('database seeder creates complete commerce demo data', function () {
         ->and($wishlist->product_id)->not->toBeNull()
         ->and($cart)->not->toBeNull()
         ->and($cart->status)->not->toBeNull();
+});
+
+test('database seeder stores seeded variant option ids instead of legacy values json', function () {
+    $this->seed(DatabaseSeeder::class);
+
+    $variant = Variant::query()
+        ->whereHas('product', fn ($query) => $query->where('slug', 'nova-x-pro-phone'))
+        ->orderBy('id')
+        ->firstOrFail();
+
+    $optionIds = $variant->variant_option_ids;
+
+    expect($optionIds)->toBeArray()
+        ->and($optionIds)->toHaveCount(2)
+        ->and($optionIds)->each->toBeInt();
+
+    $optionNames = VariantOption::query()
+        ->whereIn('id', $optionIds)
+        ->pluck('name')
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($optionNames)->toBe(['128GB', 'Red']);
 });

@@ -107,7 +107,7 @@ return new class extends Migration
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->array('variant_option_ids');
+            $table->json('variant_option_ids');
             $table->unsignedInteger('price');
             $table->unsignedInteger('stock');
             $table->timestamps();

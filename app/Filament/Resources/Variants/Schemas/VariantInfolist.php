@@ -13,6 +13,7 @@ class VariantInfolist
             ->components([
                 TextEntry::make('product_id')
                     ->numeric(),
+                TextEntry::make('variant_option_ids'),
                 TextEntry::make('price')
                     ->money(),
                 TextEntry::make('stock')

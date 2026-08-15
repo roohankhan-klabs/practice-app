@@ -25,6 +25,7 @@ use App\Models\Shop;
 use App\Models\SubCategory;
 use App\Models\User;
 use App\Models\Variant;
+use App\Models\VariantOption;
 use App\Models\Wishlist;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -52,6 +53,13 @@ class DemoCommerceSeeder extends Seeder
             ->keyBy('email');
 
         $paymentMethods = PaymentMethod::query()->pluck('id', 'code');
+        $variantOptionIds = VariantOption::query()
+            ->join('variant_types', 'variant_types.id', '=', 'variant_options.variant_type_id')
+            ->select('variant_options.id', 'variant_options.name', 'variant_types.key')
+            ->get()
+            ->mapWithKeys(fn ($variantOption) => [
+                $variantOption->key.':'.$variantOption->name => $variantOption->id,
+            ]);
 
         $shops = collect([
             [
@@ -281,10 +289,16 @@ class DemoCommerceSeeder extends Seeder
             }
 
             foreach ($productData['variants'] as $variantData) {
+                $optionIds = collect($variantData['values'])
+                    ->map(fn (string $optionName, string $variantTypeKey) => $variantOptionIds->get($variantTypeKey.':'.$optionName))
+                    ->sort()
+                    ->values()
+                    ->all();
+
                 Variant::query()->updateOrCreate(
                     [
                         'product_id' => $product->id,
-                        'values' => json_encode($variantData['values']),
+                        'variant_option_ids' => $optionIds,
                     ],
                     [
                         'price' => $variantData['price'],
