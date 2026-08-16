@@ -26,7 +26,11 @@ class DatabaseSeeder extends Seeder
             VariantOptionSeeder::class,
             CategorySeeder::class,
             SubCategorySeeder::class,
-            DemoCommerceSeeder::class,
+            DemoShopSeeder::class,
+            DemoProductSeeder::class,
+            DemoDeviceSeeder::class,
+            DemoCartSeeder::class,
+            DemoOrderSeeder::class,
         ]);
     }
 }
