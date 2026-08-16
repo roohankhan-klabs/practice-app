@@ -5,8 +5,30 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::inertia('/', 'home')->name('home');
+Route::inertia('/welcome', 'welcome')->name('welcome');
+Route::get('/categories/{id}', function ($id) {
+    return Inertia::render('category', [
+        'id' => $id,
+    ]);
+})->name('category.show');
+Route::get('/subcategories/{id}', function ($id) {
+    return Inertia::render('subcategory', [
+        'id' => $id,
+    ]);
+})->name('subcategory.show');
+Route::get('/products/{id}', function ($id) {
+    return Inertia::render('product', [
+        'id' => $id,
+    ]);
+})->name('product.show');
+Route::get('/shops/{id}', function ($id) {
+    return Inertia::render('shop', [
+        'id' => $id,
+    ]);
+})->name('shop.show');
 
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])

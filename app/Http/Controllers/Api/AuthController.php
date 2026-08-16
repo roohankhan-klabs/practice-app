@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\Status;
+use App\Enums\UserStatus;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Verification;
@@ -45,7 +46,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'status' => Status::Active,
+            'status' => UserStatus::ACTIVE,
             'role_id' => Role::CUSTOMER,
         ]);
 
@@ -131,7 +132,7 @@ class AuthController extends Controller
             'phone' => $user->phone,
             'email' => $user->email,
             'otp' => $otp,
-            'status' => Status::Pending,
+            'status' => Verification::PENDING,
         ]);
 
         return $this->formatResponse('OTP sent successfully');
@@ -152,7 +153,7 @@ class AuthController extends Controller
 
         $verification = Verification::where('user_id', $user->id)
             ->where('otp', $validated['otp'])
-            ->where('status', Status::Pending)
+            ->where('status', Verification::PENDING)
             ->first();
 
         if (! $verification) {
@@ -160,14 +161,14 @@ class AuthController extends Controller
         }
         if ($verification->created_at < now()->subMinutes(5)) {
             $verification->update([
-                'status' => Status::Expired,
+                'status' => Verification::EXPIRED,
             ]);
 
             return $this->formatError('OTP expired', 401);
         }
 
         $verification->update([
-            'status' => Status::Verified,
+            'status' => Verification::VERIFIED,
         ]);
 
         return $this->formatResponse('OTP verified successfully', [
@@ -212,7 +213,7 @@ class AuthController extends Controller
 
         $verification = Verification::where('user_id', $user->id)
             ->where('otp', $validated['otp'])
-            ->where('status', Status::Verified)
+            ->where('status', Verification::VERIFIED)
             ->first();
 
         if (! $verification) {

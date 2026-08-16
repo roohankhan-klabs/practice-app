@@ -9,14 +9,14 @@ class ShopController extends Controller
 {
     public function index(Request $request)
     {
-        $shops = Shop::all();
+        $shops = Shop::with('products')->get();
 
         return $this->formatResponse('Shops fetched successfully', $shops);
     }
 
     public function show(Request $request, int $shopId)
     {
-        $shop = Shop::findOrFail($shopId);
+        $shop = Shop::with('products')->findOrFail($shopId);
 
         return $this->formatResponse('Shop fetched successfully', $shop);
     }

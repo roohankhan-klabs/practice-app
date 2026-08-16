@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -40,6 +41,8 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class Product extends Model
 {
+    protected $appends = ['is_in_cart'];
+
     public function shop()
     {
         return $this->belongsTo(Shop::class);
@@ -63,5 +66,18 @@ class Product extends Model
     public function variants()
     {
         return $this->hasMany(Variant::class);
+    }
+    public function getIsInCartAttribute()
+    {
+        $user = auth('sanctum')->user();
+        if (!$user) {
+            return false;
+        }
+
+        return Cart::where('user_id', $user->id)
+            ->whereHas('cartItems', function ($query) {
+                $query->where('product_id', $this->id);
+            })
+            ->exists();
     }
 }
