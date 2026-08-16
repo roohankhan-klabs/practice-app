@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -67,10 +66,11 @@ class Product extends Model
     {
         return $this->hasMany(Variant::class);
     }
+
     public function getIsInCartAttribute()
     {
         $user = auth('sanctum')->user();
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

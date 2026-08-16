@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -75,6 +74,7 @@ class Variant extends Model
         if ($userId === null) {
             return false;
         }
+
         return Cart::where('user_id', $userId)
             ->whereHas('cartItems', function ($query) {
                 $query->where('product_id', $this->product_id)->where('variant_id', $this->id);

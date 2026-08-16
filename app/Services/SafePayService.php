@@ -15,7 +15,9 @@ use Throwable;
 class SafepayService
 {
     private string $baseUrl;
+
     private string $apiKey;
+
     private string $merchantSecret;
 
     public function __construct()
@@ -31,6 +33,7 @@ class SafepayService
             'safepay.merchant_secret'
         );
     }
+
     public function pay(Request $request, Order $order, Payment $payment)
     {
         $amount = (int) round(
@@ -65,8 +68,8 @@ class SafepayService
                 'data.tracker'
             );
 
-            if (!$tracker) {
-                throw new \RuntimeException(
+            if (! $tracker) {
+                throw new RuntimeException(
                     'Safepay did not return a tracker.'
                 );
             }
@@ -128,7 +131,7 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl . '/order/payments/v3/',
+                $this->baseUrl.'/order/payments/v3/',
                 [
                     'merchant_api_key' => $this->apiKey,
                     'intent' => 'CYBERSOURCE',
@@ -159,8 +162,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl .
-                    '/order/payments/v3/' .
+                $this->baseUrl.
+                    '/order/payments/v3/'.
                     $tracker,
                 [
                     'payload' => [
@@ -187,8 +190,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl .
-                    '/order/payments/v3/' .
+                $this->baseUrl.
+                    '/order/payments/v3/'.
                     $tracker,
                 [
                     'payload' => [
@@ -218,8 +221,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl .
-                    '/order/payments/v3/' .
+                $this->baseUrl.
+                    '/order/payments/v3/'.
                     $tracker,
                 [
                     'payload' => [
@@ -244,8 +247,8 @@ class SafepayService
                 'Accept' => 'application/json',
             ])
             ->get(
-                $this->baseUrl .
-                    '/order/payments/v3/' .
+                $this->baseUrl.
+                    '/order/payments/v3/'.
                     $tracker
             );
 
@@ -259,9 +262,9 @@ class SafepayService
         }
 
         throw new RuntimeException(
-            'Safepay API error: ' .
-                $response->status() .
-                ' ' .
+            'Safepay API error: '.
+                $response->status().
+                ' '.
                 $response->body()
         );
     }

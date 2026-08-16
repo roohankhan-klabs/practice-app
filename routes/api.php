@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\StateController;
+use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,8 @@ Route::prefix('v1')->group(function () {
     // catalog
     Route::post('categories', [CategoryController::class, 'index']);
     Route::get('categories/{id}', [CategoryController::class, 'show']);
+    Route::get('subcategories', [SubCategoryController::class, 'index']);
+    Route::get('subcategories/{id}', [SubCategoryController::class, 'show']);
 
     // settings
     Route::post('settings', [SettingController::class, 'index']);

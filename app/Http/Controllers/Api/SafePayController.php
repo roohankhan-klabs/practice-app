@@ -7,11 +7,7 @@ use Illuminate\Http\Request;
 
 class SafePayController extends Controller
 {
-    public function success(Request $request){
+    public function success(Request $request) {}
 
-    }
-    public function failed(Request $request){
-
-
-    }
+    public function failed(Request $request) {}
 }

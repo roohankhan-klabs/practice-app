@@ -15,6 +15,7 @@ class InitController extends Controller
         $subcategories = SubCategory::all();
         $products = Product::with('images', 'variants', 'reviews')->get();
         $shops = Shop::all();
+
         return $this->formatResponse('Init data fetched successfully', [
             'categories' => $categories,
             'subcategories' => $subcategories,

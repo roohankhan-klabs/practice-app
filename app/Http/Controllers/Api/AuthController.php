@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\Status;
 use App\Enums\UserStatus;
 use App\Models\Role;
 use App\Models\User;
