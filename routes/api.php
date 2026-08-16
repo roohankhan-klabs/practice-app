@@ -81,6 +81,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/clear', [CartController::class, 'clearCart']);
         });
 
+        Route::post('ready-for-checkout', [OrderController::class, 'readyForCheckout']);
         Route::post('checkout', [OrderController::class, 'checkout']);
     });
 });

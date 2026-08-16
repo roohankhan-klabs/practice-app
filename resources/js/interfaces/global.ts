@@ -44,6 +44,7 @@ export interface Product {
     sub_category_id: number;
     updated_at: string;
     is_in_cart?: boolean;
+    final_price?: number;
 }
 export interface Image {
     id: number;
@@ -64,6 +65,7 @@ export interface Variant {
     is_in_cart: boolean;
     variant_options_summary: string;
     variant_options: VariantOption[];
+    final_price?: number;
 }
 export interface VariantOption {
     id: number;

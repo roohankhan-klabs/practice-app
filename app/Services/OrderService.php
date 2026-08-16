@@ -12,6 +12,43 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
+    public function calculateTotal(Collection $cartItems): array
+    {
+        $subtotal = 0;
+        $shippingFees = 0;
+        $discount = 0;
+        $tax = 0.00;
+
+        foreach ($cartItems as $cartItem) {
+            $unitPrice = $cartItem->variant ? $cartItem->variant->price : $cartItem->product->price;
+            $quantity = $cartItem->quantity;
+
+            $discountAmountPerUnit = 0;
+            $product = $cartItem->product;
+            if ($product->discount_value > 0) {
+                if ($product->discount_type === 'percentage') {
+                    $discountAmountPerUnit = ($unitPrice * $product->discount_value) / 100;
+                } elseif ($product->discount_type === 'fixed') {
+                    $discountAmountPerUnit = $product->discount_value;
+                }
+                $discountAmountPerUnit = min($unitPrice, $discountAmountPerUnit);
+            }
+
+            $subtotal += $unitPrice * $quantity;
+            $discount += $discountAmountPerUnit * $quantity;
+            $shippingFees += ($product->shipping_price ?? 0) * $quantity;
+        }
+
+        $totalAmount = max(0, $subtotal - $discount + $shippingFees + $tax);
+
+        return [
+            'subtotal' => $subtotal,
+            'shipping_fees' => $shippingFees,
+            'tax' => $tax,
+            'discount' => $discount,
+            'total_amount' => $totalAmount,
+        ];
+    }
     /**
      * @param  array<string, mixed>  $validated
      * @param  Collection<int, CartItem>  $cartItems

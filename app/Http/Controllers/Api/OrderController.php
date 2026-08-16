@@ -49,4 +49,23 @@ class OrderController extends Controller
             'payment' => $payment,
         ]);
     }
+
+    public function readyForCheckout(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'cart_item_ids' => 'required|array',
+            'cart_item_ids.*' => 'exists:cart_items,id',
+        ]);
+        $cartItems = $this->cartService->getUserCartItems($request, $validated['cart_item_ids']);
+        if ($cartItems->isEmpty()) {
+            return $this->formatError('Cart items not found', 404);
+        }
+        $paymentMethods = PaymentMethod::where('is_active', true)->get();
+        $bill = $this->orderService->calculateTotal($cartItems);
+        return $this->formatResponse('Ready for checkout', [
+            'cart_items' => $cartItems,
+            'payment_methods' => $paymentMethods,
+            'bill' => $bill,
+        ]);
+    }
 }

@@ -6,12 +6,9 @@ import type { Cart } from "../interfaces/global";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Cart() {
-    const [cart, setCart] = useState<Cart>();
+    const [cart, setCart] = useState<Cart[]>([]);
+    const [selectedCartItems, setSelectedCartItems] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
-    const [total, setTotal] = useState(0);
-    const [subtotal, setSubtotal] = useState(0);
-    const [discount, setDiscount] = useState(0);
-    const [tax, setTax] = useState(0);
 
     async function getCart(showLoading = true) {
         if (showLoading) {
@@ -36,17 +33,18 @@ export default function Cart() {
             setLoading(false);
         }
     }
-
     useEffect(() => {
         getCart(false);
     }, [])
 
-    async function removeFromCart(id: string) {
+    async function removeFromCart(id: number) {
         try {
             const response = await fetch(`${API_BASE_URL}/carts/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             const data = await response.json();
@@ -57,12 +55,14 @@ export default function Cart() {
         }
     }
 
-    async function updateCart(id: string, quantity: number) {
+    async function updateCart(id: number, quantity: number) {
         try {
             const response = await fetch(`${API_BASE_URL}/carts/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({ quantity }),
             });
@@ -74,17 +74,21 @@ export default function Cart() {
         }
     }
 
-    async function checkout() {
+    async function readyForCheckout(cartItemIds: number[]) {
         try {
-            const response = await fetch(`${API_BASE_URL}/checkout`, {
+            const response = await fetch(`${API_BASE_URL}/ready-for-checkout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
+                body: JSON.stringify({ cart_item_ids: cartItemIds }),
             });
             const data = await response.json();
+            console.log(data);
             toast.success(data.message);
-            router.get('/orders');
+            // window.location.href = "/checkout";
         } catch (error) {
             console.error('Error checking out:', error);
         }
@@ -96,6 +100,8 @@ export default function Cart() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             const data = await response.json();
@@ -106,20 +112,46 @@ export default function Cart() {
         }
     }
 
+    const selectedItems = cart.filter(item => selectedCartItems.includes(item.id));
+
+    const subtotal = selectedItems.reduce((sum, item) => {
+        const originalPrice = item.variant?.price ?? item.product.price;
+
+        return sum + (originalPrice * item.quantity);
+    }, 0);
+
+    const total = selectedItems.reduce((sum, item) => {
+        const finalPrice = item.variant?.final_price ?? item.product.final_price ?? item.product.price;
+
+        return sum + (finalPrice * item.quantity);
+    }, 0);
+
+    const discount = subtotal - total;
+
     return (
         <>
             <div>
-                <h1>Cart</h1>
+                <h1>{loading ? 'Loading...' : 'Cart'}</h1>
+                <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => confirm("Are you sure you want to clear your cart?") && clearCart()}>Clear Cart</button>
                 {cart?.map(item => (
                     <div key={item.id}>
-                        <img src={item.product.images[0].image} alt={item.product.name} />
+                        <input type="checkbox" checked={selectedCartItems.includes(item.id)} onChange={(e) => setSelectedCartItems(e.target.checked ? [...selectedCartItems, item.id] : selectedCartItems.filter(id => id !== item.id))} />
                         <h2>{item.product.name}</h2>
-                        <p>{item.product.description}</p>
-                        <p>{item.product.price}</p>
-                        <p>{item.product.stock}</p>
-                        <p>{item.product.is_in_cart}</p>
+                        <p>{item.variant.variant_options_summary}</p>
+                        <p>Rs {item.product.price}</p>
+                        <p>Rs {item.variant.final_price}</p>
+                        <p>Quantity: {item.quantity}</p>
+                        <div className="flex items-center">
+                            <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => updateCart(item.id, item.quantity - 1)}>-</button>
+                            <button className="bg-green-500 text-white px-4 py-2 rounded-md" onClick={() => updateCart(item.id, item.quantity + 1)}>+</button>
+                            <button className="bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => confirm("Are you sure you want to remove this item from your cart?") && removeFromCart(item.id)}>Remove</button>
+                        </div>
                     </div>
                 ))}
+                <p>Subtotal: {subtotal}</p>
+                <p>Discount: {discount}</p>
+                <p>Total: {total}</p>
+                <button className={`bg-green-500 text-white px-4 py-2 rounded-md ${selectedCartItems.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={selectedCartItems.length === 0} onClick={() => readyForCheckout(selectedCartItems)}>Checkout</button>
             </div>
         </>
     );

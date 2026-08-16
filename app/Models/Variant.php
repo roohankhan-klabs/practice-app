@@ -23,7 +23,7 @@ use Illuminate\Support\Collection;
 #[Fillable(['product_id', 'variant_option_ids', 'price', 'stock'])]
 class Variant extends Model
 {
-    protected $appends = ['variant_options_summary', 'is_in_cart'];
+    protected $appends = ['variant_options_summary', 'is_in_cart', 'final_price'];
 
     protected function casts(): array
     {
@@ -64,7 +64,7 @@ class Variant extends Model
             ->with('variantType')
             ->whereIn('id', $variantOptionIds)
             ->get()
-            ->sortBy(fn (VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
+            ->sortBy(fn(VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
             ->values();
     }
 
@@ -80,5 +80,15 @@ class Variant extends Model
                 $query->where('product_id', $this->product_id)->where('variant_id', $this->id);
             })
             ->exists();
+    }
+    public function getFinalPriceAttribute()
+    {
+        if ($this->product->discount_type === 'percentage') {
+            return $this->price - ($this->price * $this->product->discount_value / 100);
+        } else if ($this->product->discount_type === 'fixed') {
+            return $this->price - $this->product->discount_value;
+        } else {
+            return $this->price;
+        }
     }
 }

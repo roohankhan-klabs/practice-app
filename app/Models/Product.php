@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class Product extends Model
 {
-    protected $appends = ['is_in_cart'];
+    protected $appends = ['is_in_cart', 'final_price'];
 
     public function shop()
     {
@@ -79,5 +79,14 @@ class Product extends Model
                 $query->where('product_id', $this->id);
             })
             ->exists();
+    }
+    public function getFinalPriceAttribute(){
+        if ($this->discount_type === 'percentage') {
+            return $this->price - ($this->price * $this->discount_value / 100);
+        } else if ($this->discount_type === 'fixed') {
+            return $this->price - $this->discount_value;
+        } else {
+            return $this->price;
+        }
     }
 }
