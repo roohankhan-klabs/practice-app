@@ -70,9 +70,12 @@ export default function Product(id: ProductProps) {
         <div>{product?.description}</div>
         <div>{product?.price}</div>
         <div>{product?.variants?.map((variant) => (
-            <div key={variant.id}>{variant.variant_options_summary} - {variant.price} <button onClick={() => addToCart(product?.id || 0, variant.id)}>
-                {variant.is_in_cart ? "In Cart" : "Add to Cart"}
-            </button></div>
+            <div key={variant.id} className="m-1">
+                {variant.variant_options_summary} - {variant.price}
+                <button className="bg-white mx-1 px-2 py-1 text-black" onClick={() => addToCart(product?.id || 0, variant.id)}>
+                    {variant.is_in_cart ? "In Cart" : "Add to Cart"}
+                </button>
+            </div>
         ))}</div>
     </>;
 }
