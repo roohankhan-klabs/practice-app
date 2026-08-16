@@ -1,11 +1,11 @@
 import { Link } from "@inertiajs/react";
+import { Mail, Lock, User, Store, CheckCircle2, ShoppingBag, Sparkles, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import AlertError from "@/components/alert-error";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Lock, User, Store, CheckCircle2, ShoppingBag, Sparkles, ShieldCheck } from "lucide-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -26,10 +26,7 @@ export default function Home() {
         }
     }, []);
 
-    // Clear errors when switching tabs
-    useEffect(() => {
-        setErrors([]);
-    }, [activeTab]);
+
 
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -53,6 +50,7 @@ export default function Home() {
 
             if (!response.ok) {
                 console.error("Login failed:", data);
+
                 if (data.errors) {
                     setErrors(Object.values(data.errors).flat() as string[]);
                 } else if (data.message) {
@@ -60,6 +58,7 @@ export default function Home() {
                 } else {
                     setErrors(["Invalid credentials. Please try again."]);
                 }
+
                 return;
             }
 
@@ -82,6 +81,7 @@ export default function Home() {
         if (registerPassword !== registerConfirmPassword) {
             setErrors(["Passwords do not match."]);
             setLoading(null);
+
             return;
         }
 
@@ -104,6 +104,7 @@ export default function Home() {
 
             if (!response.ok) {
                 console.error("Register failed:", data);
+
                 if (data.errors) {
                     setErrors(Object.values(data.errors).flat() as string[]);
                 } else if (data.message) {
@@ -111,6 +112,7 @@ export default function Home() {
                 } else {
                     setErrors(["Registration failed. Please check your inputs."]);
                 }
+
                 return;
             }
 
@@ -206,22 +208,26 @@ export default function Home() {
                     {/* Form switcher tabs */}
                     <div className="flex border-b border-slate-200 dark:border-slate-800 p-1 bg-slate-100 dark:bg-slate-900 rounded-lg">
                         <button
-                            onClick={() => setActiveTab("login")}
-                            className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${
-                                activeTab === "login"
+                            onClick={() => {
+                                setActiveTab("login");
+                                setErrors([]);
+                            }}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === "login"
                                     ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
                                     : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                            }`}
+                                }`}
                         >
                             Sign In
                         </button>
                         <button
-                            onClick={() => setActiveTab("register")}
-                            className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${
-                                activeTab === "register"
+                            onClick={() => {
+                                setActiveTab("register");
+                                setErrors([]);
+                            }}
+                            className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === "register"
                                     ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
                                     : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                            }`}
+                                }`}
                         >
                             Sign Up
                         </button>

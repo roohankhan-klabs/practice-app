@@ -1,14 +1,14 @@
 import { Link } from "@inertiajs/react";
-import { useEffect, useState } from "react";
-import type { Category, SubCategory, Product, Shop } from "../interfaces/global";
-import { 
-    Search, Store, ShoppingBag, FolderOpen, LogOut, ArrowRight, 
+import {
+    Search, Store, ShoppingBag, FolderOpen, LogOut, ArrowRight,
     Star, MessageSquare, PhoneCall, Heart, Sparkles, Compass
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import type { Category, SubCategory, Product, Shop } from "../interfaces/global";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -68,20 +68,20 @@ export default function Welcome() {
     }
 
     // Client-side search filtering
-    const filteredCategories = categories.filter(c => 
+    const filteredCategories = categories.filter(c =>
         c.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredSubcategories = subcategories.filter(s => 
+    const filteredSubcategories = subcategories.filter(s =>
         s.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredShops = shops.filter(s => 
+    const filteredShops = shops.filter(s =>
         s.shop_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         s.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredProducts = products.filter(p => 
+    const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -128,9 +128,9 @@ export default function Welcome() {
                                 Dashboard
                             </Button>
                         </Link>
-                        <Button 
-                            variant="outline" 
-                            size="sm" 
+                        <Button
+                            variant="outline"
+                            size="sm"
                             onClick={handleLogout}
                             className="text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white flex items-center gap-1.5"
                         >
@@ -184,8 +184,8 @@ export default function Welcome() {
                     {filteredCategories.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {filteredCategories.map((category) => (
-                                <Link 
-                                    key={category.id} 
+                                <Link
+                                    key={category.id}
                                     href={`/categories/${category.id}`}
                                     className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs hover:shadow-md hover:border-indigo-500/50 dark:hover:border-indigo-400/50 transition-all duration-300 flex flex-col justify-between min-h-[120px]"
                                 >
@@ -247,9 +247,9 @@ export default function Welcome() {
                                             </p>
                                             <div className="flex flex-wrap gap-2 mb-4">
                                                 {shop.whatsapp_number && (
-                                                    <a 
-                                                        href={`https://wa.me/${shop.whatsapp_number}`} 
-                                                        target="_blank" 
+                                                    <a
+                                                        href={`https://wa.me/${shop.whatsapp_number}`}
+                                                        target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2 py-1 rounded-md font-medium hover:underline"
                                                     >
@@ -298,7 +298,7 @@ export default function Welcome() {
                                 // Match the product's shop to display shop name
                                 const productShop = shops.find(s => s.id === product.shop_id);
                                 return (
-                                    <div 
+                                    <div
                                         key={product.id}
                                         className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-md transition-shadow"
                                     >

@@ -123,3 +123,14 @@ export interface Shop {
     user_id: number;
     whatsapp_number: string;
 }
+export interface Cart {
+    id: number,
+    cart_id: number,
+    product_id: number,
+    variant_id: number,
+    quantity: number,
+    created_at: string,
+    updated_at: string,
+    product: Product,
+    variant: Variant
+}
