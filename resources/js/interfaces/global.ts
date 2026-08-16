@@ -19,6 +19,9 @@ export interface SubCategory {
     updated_at: string;
 }
 export interface Product {
+    images: Image[];
+    variants: Variant[];
+    reviews: Review[];
     created_at: string;
     description: string;
     discount_type: string;
@@ -41,6 +44,54 @@ export interface Product {
     sub_category_id: number;
     updated_at: string;
     is_in_cart?: boolean;
+}
+export interface Image {
+    id: number;
+    image: string;
+    product_id: number;
+    created_at: string;
+    updated_at: string;
+    alt_text: string;
+    sort_order: number;
+    is_thumbnail: number;
+}
+export interface Variant {
+    id: number;
+    product_id: number;
+    variant_option_ids: number[];
+    price: number;
+    stock: number;
+    is_in_cart: boolean;
+    variant_options_summary: string;
+    variant_options: VariantOption[];
+}
+export interface VariantOption {
+    id: number;
+    variant_type_id: number;
+    name: string;
+    hex_code: string;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+    variant_type: VariantType;
+}
+export interface VariantType {
+    id: number;
+    key: string;
+    name: string;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+}
+export interface Review {
+    id: number;
+    user_id: number;
+    shop_id: number;
+    product_id: number;
+    rating: number;
+    comment: string;
+    created_at: string;
+    updated_at: string;
 }
 export interface Shop {
     id: number;

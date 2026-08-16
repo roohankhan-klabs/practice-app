@@ -13,7 +13,7 @@ class InitController extends Controller
     {
         $categories = Category::all();
         $subcategories = SubCategory::all();
-        $products = Product::with('images')->get();
+        $products = Product::with('images', 'variants', 'reviews')->get();
         $shops = Shop::all();
         return $this->formatResponse('Init data fetched successfully', [
             'categories' => $categories,

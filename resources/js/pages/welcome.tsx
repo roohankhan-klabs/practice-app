@@ -13,34 +13,6 @@ export default function Welcome() {
     const [products, setProducts] = useState<Product[]>([]);
     const [shops, setShops] = useState<Shop[]>([]);
 
-    async function addToCart(productId: number) {
-        const response = await fetch(`${API_BASE_URL}/carts`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                quantity: 1,
-            }),
-        });
-        const data = await response.json();
-        console.log(data);
-
-        if (data.success) {
-            alert("Product added to cart successfully");
-            setProducts((prevProducts) =>
-                prevProducts.map((p) =>
-                    p.id === productId ? { ...p, is_in_cart: true } : p
-                )
-            );
-        } else {
-            alert("Failed to add product to cart");
-        }
-    }
-
     useEffect(() => {
         async function getInitData() {
             const response = await fetch(`${API_BASE_URL}/init`, {
@@ -92,12 +64,6 @@ export default function Welcome() {
                                 <Link href={`/products/${product.id}`} className="block text-blue-600 hover:underline">
                                     {product.name}
                                 </Link>
-                                <button
-                                    onClick={() => addToCart(product.id)}
-                                    className="bg-green-500 text-black border border-green-500 hover:bg-green-600 hover:text-white rounded-md px-2 py-1 cursor-pointer"
-                                >
-                                    {product.is_in_cart ? "In Cart" : "Add to Cart"}
-                                </button>
                             </div>
                         ))}
                     </div>

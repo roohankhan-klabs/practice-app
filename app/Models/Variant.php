@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -23,7 +24,7 @@ use Illuminate\Support\Collection;
 #[Fillable(['product_id', 'variant_option_ids', 'price', 'stock'])]
 class Variant extends Model
 {
-    protected $appends = ['variant_options_summary'];
+    protected $appends = ['variant_options_summary', 'is_in_cart'];
 
     protected function casts(): array
     {
@@ -66,5 +67,18 @@ class Variant extends Model
             ->get()
             ->sortBy(fn (VariantOption $option) => $positions[$option->id] ?? PHP_INT_MAX)
             ->values();
+    }
+
+    public function getIsInCartAttribute(): bool
+    {
+        $userId = auth('sanctum')->user()->id ?? null;
+        if ($userId === null) {
+            return false;
+        }
+        return Cart::where('user_id', $userId)
+            ->whereHas('cartItems', function ($query) {
+                $query->where('product_id', $this->product_id)->where('variant_id', $this->id);
+            })
+            ->exists();
     }
 }
