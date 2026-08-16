@@ -6,17 +6,18 @@ use App\Models\PaymentMethod;
 use App\Services\AddressService;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function __construct(private OrderService $orderService, private CartService $cartService, private AddressService $addressService)
-    {
-        $this->orderService = $orderService;
-        $this->cartService = $cartService;
-        $this->addressService = $addressService;
-    }
+    public function __construct(
+        private AddressService $addressService,
+        private CartService $cartService,
+        private PaymentService $paymentService,
+        private OrderService $orderService
+    ) {}
 
     public function checkout(Request $request): JsonResponse
     {
@@ -34,12 +35,18 @@ class OrderController extends Controller
         if (! $paymentMethod) {
             return $this->formatError('Payment method not found', 404);
         }
+
         $cartItems = $this->cartService->getUserCartItems($request, $validated['cart_item_ids']);
         if ($cartItems->isEmpty()) {
             return $this->formatError('Cart items not found', 404);
         }
         $orders = $this->orderService->placeOrder($request, $validated, $cartItems);
+        $payment = $this->paymentService->createPayment($request, $validated, $orders);
 
-        return $this->formatResponse('Order placed successfully', $orders);
+        return $this->formatResponse('Order placed successfully', [
+            'address' => $address,
+            'orders' => $orders,
+            'payment' => $payment,
+        ]);
     }
 }

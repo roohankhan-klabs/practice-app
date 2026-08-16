@@ -67,8 +67,7 @@ class OrderService
                     'tax' => $tax,
                     'discount' => $discount,
                     'total_amount' => $totalAmount,
-                    'payment_method_id' => $validated['payment_method_id'],
-                    'status' => 'pending',
+                    'status' => Order::INITIALIZED,
                 ]);
 
                 foreach ($items as $cartItem) {

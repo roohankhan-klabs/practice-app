@@ -7,22 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(
     [
-        'user_id',
+        'order_id',
         'payment_method_id',
-        'reference_type',
-        'reference_id',
         'transaction_id',
-        'tap_charge_id',
-        'tap_tracking_id',
+        'amount',
+        'currency',
         'status',
+        'response',
         'paid_at',
     ]
 )]
 class Payment extends Model
 {
-    public function user()
+    protected $casts = [
+        'response' => 'array',
+        'paid_at' => 'datetime',
+    ];
+
+    public function order()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function paymentMethod()

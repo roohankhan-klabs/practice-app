@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class PaymentMethodController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $paymentMethods = PaymentMethod::where('user_id', $request->user()->id)->where('is_active', true)->get();
+        $paymentMethods = PaymentMethod::where('is_active', true)->get();
 
         return $this->formatResponse('Payment methods fetched successfully', $paymentMethods);
     }
