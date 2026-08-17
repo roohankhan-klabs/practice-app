@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\PaymentStatus;
 use App\Models\Address;
-use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
-use App\Models\PaymentOrder;
 use App\Services\AddressService;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -90,47 +88,78 @@ class OrderController extends Controller
         if ($cartItems->isEmpty()) {
             return $this->formatError('Cart items not found', 404);
         }
+        $bill = $this->orderService->calculateTotal($cartItems);
         $orders = $this->orderService->placeOrder($request, $validated, $cartItems);
 
-        foreach ($orders as $order) {
-            if ($validated['payment_method_id'] == PaymentMethod::CASH_ON_DELIVERY) {
-                $payment = $this->payWithCashOnDelivery($order, $validated);
+        if ($validated['payment_method_id'] == PaymentMethod::CASH_ON_DELIVERY) {
+            $payment = $this->payWithCashOnDelivery(
+                $request,
+                $orders,
+                $validated,
+                $bill
+            );
 
-                return $this->formatResponse('Order placed successfully', $payment);
-            } elseif ($validated['payment_method_id'] == PaymentMethod::SAFEPAY) {
-                $response = $this->safepay->pay($request, $order);
-                if ($response && isset($response['success']) && $response['success'] == true) {
-                    return $this->formatResponse($response['message'], $response);
-                } else {
-                    $errorMessage = $response['message'] ?? 'Unable to initialize Safepay payment';
+            return $this->formatResponse(
+                'Order placed successfully',
+                [
+                    'payment_id' => $payment->id,
+                    'reference' => $orders->first()?->reference,
+                ]
+            );
+        }
 
-                    return $this->formatError($errorMessage, 400);
-                }
+        if ($validated['payment_method_id'] == PaymentMethod::SAFEPAY) {
+            $payment = $this->orderService->createPaymentForOrders(
+                $orders,
+                PaymentMethod::SAFEPAY,
+                $bill
+            );
+
+            $response = $this->safepay->initializePayment(
+                $request,
+                $payment,
+                $orders,
+                $bill,
+                $validated['cart_item_ids']
+            );
+
+            if ($response['success'] ?? false) {
+                return $this->formatResponse(
+                    $response['message'],
+                    $response
+                );
             }
+
+            return $this->formatError(
+                $response['message'] ?? 'Unable to initialize Safepay payment',
+                400
+            );
         }
 
         return $this->formatError('Unable to place order', 500);
     }
 
-    public function payWithCashOnDelivery(Order $order, array $validated)
+    public function payWithCashOnDelivery(Request $request, $orders, array $validated, array $bill)
     {
         $transaction_id = 'TXN-'.strtoupper(Str::random(12));
-        $payment = Payment::create([
-            'payment_method_id' => PaymentMethod::CASH_ON_DELIVERY,
-            'transaction_id' => $transaction_id,
-            'amount' => $order->total_amount,
-            'currency' => 'PKR',
-            'status' => PaymentStatus::COD_PENDING,
-        ]);
-        PaymentOrder::create([
-            'payment_id' => $payment->id,
-            'order_id' => $order->id,
-        ]);
-        $order->update([
-            'status' => Order::PENDING,
-        ]);
+        $payment = $this->orderService->createPaymentForOrders(
+            $orders,
+            PaymentMethod::CASH_ON_DELIVERY,
+            $bill,
+            'PKR',
+            PaymentStatus::COD_PENDING,
+            $transaction_id
+        );
 
-        CartItem::whereIn('id', $validated['cart_item_ids'])->delete();
+        Order::whereIn('id', $orders->pluck('id'))
+            ->update([
+                'status' => Order::PENDING,
+            ]);
+
+        $this->cartService->clearCartItemsByIds(
+            $request,
+            $validated['cart_item_ids']
+        );
 
         return $payment;
     }

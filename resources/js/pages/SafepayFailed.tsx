@@ -1,31 +1,51 @@
 type SafepayFailedProps = {
     tracker?: string | null;
+    successful?: boolean;
+    paymentId?: number | null;
+    orderIds?: number[];
+    trackerState?: string | null;
 };
 
 export default function SafepayFailed({
-    tracker: initialTracker,
+    tracker,
+    successful = false,
+    paymentId,
+    orderIds = [],
+    trackerState,
 }: SafepayFailedProps) {
-    const params = new URLSearchParams(
-        window.location.search
-    );
-
-    const tracker =
-        initialTracker ??
-        params.get('tracker');
-
     return (
         <div className="mx-auto max-w-xl p-6">
             <h1 className="text-2xl font-semibold">
-                Payment Cancelled
+                Payment Result
             </h1>
 
             <p className="mt-4 text-sm text-gray-700">
-                The Safepay checkout was cancelled or did not complete.
+                {successful
+                    ? 'The payment had already been finalized successfully.'
+                    : 'The Safepay payment was cancelled or did not complete.'}
             </p>
+
+            {paymentId && (
+                <p className="mt-2 text-xs text-gray-500">
+                    Payment ID: {paymentId}
+                </p>
+            )}
+
+            {orderIds.length > 0 && (
+                <p className="mt-2 text-xs text-gray-500">
+                    Orders: {orderIds.join(', ')}
+                </p>
+            )}
 
             {tracker && (
                 <p className="mt-2 text-xs text-gray-500">
                     Tracker: {tracker}
+                </p>
+            )}
+
+            {trackerState && (
+                <p className="mt-2 text-xs text-gray-500">
+                    Tracker state: {trackerState}
                 </p>
             )}
         </div>

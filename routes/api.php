@@ -84,16 +84,15 @@ Route::prefix('v1')->group(function () {
 
         Route::post('ready-for-checkout', [OrderController::class, 'readyForCheckout']);
         Route::post('checkout', [OrderController::class, 'checkout']);
-        Route::post('safepay/transient-token', [PaymentController::class, 'handleTransientToken']);
-
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index']);
             Route::get('/{orderId}', [OrderController::class, 'show']);
         });
 
         Route::prefix('payments')->group(function () {
-            Route::get('/tracker/{tracker}', [PaymentController::class, 'showByTracker']);
             Route::get('/{paymentId}', [PaymentController::class, 'show']);
+            Route::post('/{paymentId}/capture-context', [PaymentController::class, 'createCaptureContext']);
+            Route::post('/{paymentId}/transient-token', [PaymentController::class, 'handleTransientToken']);
         });
     });
 });

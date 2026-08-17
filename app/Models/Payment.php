@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     protected $casts = [
-        'tracker' => 'array',
         'response' => 'array',
         'paid_at' => 'datetime',
     ];
@@ -34,15 +33,11 @@ class Payment extends Model
         return $this->hasMany(PaymentOrder::class);
     }
 
-    public function order()
+    public function orders()
     {
-        return $this->hasOneThrough(
+        return $this->belongsToMany(
             Order::class,
-            PaymentOrder::class,
-            'payment_id',
-            'id',
-            'id',
-            'order_id'
+            'payment_orders'
         );
     }
 }

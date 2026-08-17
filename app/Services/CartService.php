@@ -130,4 +130,19 @@ class CartService
 
         return CartItem::where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->with(['product.images', 'variant'])->get();
     }
+
+    public function clearCartItemsByIds(
+        Request $request,
+        array $cartItemIds
+    ): void {
+        $cart = Cart::where('user_id', $request->user()->id)->first();
+
+        if (! $cart || $cartItemIds === []) {
+            return;
+        }
+
+        CartItem::where('cart_id', $cart->id)
+            ->whereIn('id', $cartItemIds)
+            ->delete();
+    }
 }

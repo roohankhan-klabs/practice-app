@@ -64,6 +64,14 @@ class Order extends Model
 
     public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->belongsToMany(
+            Payment::class,
+            'payment_orders'
+        );
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
     }
 }

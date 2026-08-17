@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
+use App\Models\PaymentOrder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Enums\PaymentStatus;
 
 class OrderService
 {
@@ -133,6 +136,50 @@ class OrderService
                 $orders->push($order);
             }
             return $orders;
+        });
+    }
+
+    /**
+     * @param  Collection<int, Order>  $orders
+     * @param  array{subtotal:mixed,shipping_fees:mixed,tax:mixed,discount:mixed,total_amount:mixed}  $bill
+     */
+    public function createPaymentForOrders(
+        Collection $orders,
+        int $paymentMethodId,
+        array $bill,
+        string $currency = 'PKR',
+        PaymentStatus $status = PaymentStatus::PENDING,
+        ?string $transactionId = null
+    ): Payment {
+        return DB::transaction(function () use (
+            $orders,
+            $paymentMethodId,
+            $bill,
+            $currency,
+            $status,
+            $transactionId
+        ) {
+            $payment = Payment::create([
+                'payment_method_id' => $paymentMethodId,
+                'transaction_id' => $transactionId,
+                'amount' => (string) $bill['total_amount'],
+                'currency' => $currency,
+                'status' => $status->value,
+            ]);
+
+            foreach ($orders as $order) {
+                PaymentOrder::create([
+                    'payment_id' => $payment->id,
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            Order::whereIn('id', $orders->pluck('id'))
+                ->update([
+                    'payment_id' => $payment->id,
+                ]);
+
+            return $payment->load('orders');
         });
     }
 }

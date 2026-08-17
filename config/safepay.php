@@ -1,10 +1,13 @@
 <?php
 
 return [
+    'environment' => env('SAFEPAY_ENV', 'sandbox'),
 
     'base_url' => env(
         'SAFEPAY_BASE_URL',
-        'https://sandbox.api.getsafepay.com'
+        env('SAFEPAY_ENV', 'sandbox') === 'production'
+            ? 'https://api.getsafepay.com'
+            : 'https://sandbox.api.getsafepay.com'
     ),
 
     'api_key' => env('SAFEPAY_API_KEY'),
@@ -21,6 +24,11 @@ return [
     'checkout_cancel_url' => env(
         'SAFEPAY_CHECKOUT_CANCEL_URL',
         rtrim(env('APP_URL', 'http://localhost'), '/').'/safepay/failed'
+    ),
+
+    'checkout_origin' => env(
+        'SAFEPAY_CHECKOUT_ORIGIN',
+        env('APP_URL', 'http://localhost')
     ),
 
 ];
