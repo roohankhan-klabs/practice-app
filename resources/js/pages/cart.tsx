@@ -102,8 +102,8 @@ export default function Cart() {
 
     async function clearCart() {
         try {
-            const response = await fetch(`${API_BASE_URL}/cart/clear`, {
-                method: 'DELETE',
+            const response = await fetch(`${API_BASE_URL}/carts/clear`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
@@ -111,6 +111,7 @@ export default function Cart() {
                 },
             });
             const data = await response.json();
+
             if (response.ok) {
                 toast.success(data.message || "Cart cleared");
                 setSelectedCartItems([]);

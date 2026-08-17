@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/init', [InitController::class, 'index']);
+        Route::get('/cart-items-count', [InitController::class, 'cartItemsCount']);
         // user
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('profile', [AuthController::class, 'profile']);
@@ -79,7 +80,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [CartController::class, 'store']);
             Route::put('/{cartItemId}', [CartController::class, 'update']);
             Route::delete('/{cartItemId}', [CartController::class, 'destroy']);
-            Route::delete('/clear', [CartController::class, 'clearCart']);
+            Route::post('/clear', [CartController::class, 'clearCart']);
         });
 
         Route::post('ready-for-checkout', [OrderController::class, 'readyForCheckout']);

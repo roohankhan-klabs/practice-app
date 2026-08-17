@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
-import { Search, Store, ShoppingBag, Heart, LayoutGrid, LogOut } from "lucide-react";
+import { Search, Store, ShoppingBag, Heart, LogOut } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -9,6 +10,7 @@ function buildApiUrl(path: string) {
     if (/^https?:\/\//.test(API_BASE_URL)) {
         return `${API_BASE_URL}${path}`;
     }
+
     return `${window.location.origin}${API_BASE_URL}${path}`;
 }
 
@@ -24,6 +26,8 @@ export default function StorefrontHeader({
     showSearch = false,
 }: StorefrontHeaderProps) {
 
+    const [cartItemsCount, setCartItemsCount] = useState(0);
+
     async function handleLogout() {
         try {
             await fetch(buildApiUrl('/logout'), {
@@ -36,9 +40,28 @@ export default function StorefrontHeader({
         } catch (e) {
             console.error("Logout request failed", e);
         }
+
         localStorage.removeItem("token");
         window.location.href = "/";
     }
+    useEffect(() => {
+        async function getCartItemsCount() {
+            try {
+                const response = await fetch(buildApiUrl('/cart-items-count'), {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                const data = await response.json();
+                setCartItemsCount(data.data.cart_items_count);
+            } catch (e) {
+                console.error("Cart items count request failed", e);
+            }
+        }
+        getCartItemsCount();
+    }, []);
 
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
@@ -90,11 +113,10 @@ export default function StorefrontHeader({
                         <Button
                             variant="ghost"
                             size="icon"
-                            className={`relative h-9 w-9 rounded-lg ${
-                                currentPath === '/wishlist'
+                            className={`relative h-9 w-9 rounded-lg ${currentPath === '/wishlist'
                                 ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30'
                                 : 'text-slate-650 dark:text-slate-350 hover:bg-slate-100 dark:hover:bg-slate-900'
-                            }`}
+                                }`}
                             title="Wishlist"
                         >
                             <Heart className={`h-4.5 w-4.5 ${currentPath === '/wishlist' ? 'fill-current' : ''}`} />
@@ -103,18 +125,24 @@ export default function StorefrontHeader({
 
                     {/* Cart Link */}
                     <Link href="/cart">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className={`relative h-9 w-9 rounded-lg ${
-                                currentPath === '/cart'
-                                ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30'
-                                : 'text-slate-655 dark:text-slate-350 hover:bg-slate-100 dark:hover:bg-slate-900'
-                            }`}
-                            title="Shopping Cart"
-                        >
-                            <ShoppingBag className="h-4.5 w-4.5" />
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className={`relative h-9 w-9 rounded-lg ${currentPath === '/cart'
+                                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30'
+                                    : 'text-slate-655 dark:text-slate-350 hover:bg-slate-100 dark:hover:bg-slate-900'
+                                    }`}
+                                title="Shopping Cart"
+                            >
+                                <ShoppingBag className="h-4.5 w-4.5" />
+                                {cartItemsCount > 0 && (
+                                    <div className="absolute top-1 right-0.5 h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                                        {cartItemsCount}
+                                    </div>
+                                )}
+                            </Button>
+                        </div>
                     </Link>
 
                     <div className="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block" />

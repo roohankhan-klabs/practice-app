@@ -77,21 +77,6 @@ export default function Welcome() {
             console.error("Error adding to wishlist", e);
         }
     }
-    async function handleLogout() {
-        try {
-            await fetch(buildApiUrl('/logout'), {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-        } catch (e) {
-            console.error("Logout request failed", e);
-        }
-        localStorage.removeItem("token");
-        window.location.href = "/";
-    }
 
     // Client-side search filtering
     const filteredCategories = categories.filter(c =>
@@ -126,10 +111,10 @@ export default function Welcome() {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
             {/* Header Navigation */}
-            <StorefrontHeader 
-                searchQuery={searchQuery} 
-                setSearchQuery={setSearchQuery} 
-                showSearch={true} 
+            <StorefrontHeader
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                showSearch={true}
             />
 
             {/* Hero Section */}
