@@ -20,6 +20,23 @@ class PaymentController extends Controller
         return $this->formatResponse('Payment found.', $payment);
     }
 
+    public function showByTracker(Request $request, string $tracker)
+    {
+        $payment = Payment::where('tracker', $tracker)->first();
+
+        if (! $payment || ! $payment->order || $payment->order->user_id !== $request->user()->id) {
+            return $this->formatError('Payment not found', 404);
+        }
+
+        $trackerResponse = $this->safepayService->getTracker($tracker);
+
+        return $this->formatResponse('Payment found.', [
+            'payment' => $payment,
+            'tracker' => data_get($trackerResponse, 'data.tracker'),
+            'action' => data_get($trackerResponse, 'data.action'),
+        ]);
+    }
+
     public function handleTransientToken(Request $request)
     {
         $response = $this->safepayService->processTransientToken($request->tracker, $request->transient_token);

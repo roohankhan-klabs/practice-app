@@ -92,6 +92,7 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('payments')->group(function () {
+            Route::get('/tracker/{tracker}', [PaymentController::class, 'showByTracker']);
             Route::get('/{paymentId}', [PaymentController::class, 'show']);
         });
     });

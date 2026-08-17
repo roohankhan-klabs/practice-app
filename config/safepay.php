@@ -13,4 +13,14 @@ return [
 
     'webhook_secret' => env('SAFEPAY_WEBHOOK_SECRET'),
 
+    'checkout_success_url' => env(
+        'SAFEPAY_CHECKOUT_SUCCESS_URL',
+        rtrim(env('APP_URL', 'http://localhost'), '/').'/safepay/success'
+    ),
+
+    'checkout_cancel_url' => env(
+        'SAFEPAY_CHECKOUT_CANCEL_URL',
+        rtrim(env('APP_URL', 'http://localhost'), '/').'/safepay/failed'
+    ),
+
 ];

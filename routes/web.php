@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Teams\TeamInvitationController;
 use App\Http\Middleware\EnsureTeamMembership;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 Route::inertia('/', 'home')->name('home');
@@ -45,8 +46,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::inertia('pay','pay')->name('pay');
-Route::inertia('/safepay/success', 'SafepaySuccess')->name('safepay.success');
-Route::inertia('/safepay/failed', 'SafepayFailed')->name('safepay.failed');
+Route::match(['get', 'post'], '/safepay/success', function (Request $request) {
+    return Inertia::render('SafepaySuccess', [
+        'tracker' => $request->input('tracker'),
+        'signature' => $request->input('sig'),
+        'reference' => $request->input('reference'),
+    ]);
+})->name('safepay.success');
+Route::match(['get', 'post'], '/safepay/failed', function (Request $request) {
+    return Inertia::render('SafepayFailed', [
+        'tracker' => $request->input('tracker'),
+    ]);
+})->name('safepay.failed');
 
 // 4111 1111 1111 1111
 // 5555 5555 5555 4444

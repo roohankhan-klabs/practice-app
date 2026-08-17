@@ -10,16 +10,27 @@ use App\Models\PaymentOrder;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 use Throwable;
 
 class SafePayService
 {
+    private const SANDBOX_CHECKOUT_URL =
+        'https://sandbox.api.getsafepay.com/checkout/pay';
+
+    private const PRODUCTION_CHECKOUT_URL =
+        'https://getsafepay.com/checkout/pay';
+
     private string $baseUrl;
 
     private string $apiKey;
 
     private string $merchantSecret;
+
+    private string $checkoutSuccessUrl;
+
+    private string $checkoutCancelUrl;
 
     public function __construct()
     {
@@ -32,6 +43,16 @@ class SafePayService
 
         $this->merchantSecret = config(
             'safepay.merchant_secret'
+        );
+
+        $this->checkoutSuccessUrl = rtrim(
+            (string) config('safepay.checkout_success_url'),
+            '/'
+        );
+
+        $this->checkoutCancelUrl = rtrim(
+            (string) config('safepay.checkout_cancel_url'),
+            '/'
         );
     }
 
@@ -75,17 +96,17 @@ class SafePayService
                     'Safepay tracker token/client missing.'
                 );
             }
-            $captureContext =
-                $this->generateCaptureContext(
-                    $tracker
-                );
+            $checkoutUrl = $this->buildCheckoutUrl(
+                tracker: $tracker,
+                order: $order
+            );
 
             $newPayment->update([
                 'tracker' => $tracker,
                 'status' => PaymentStatus::PROCESSING,
                 'response' => [
                     'tracker' => $result,
-                    'capture_context' => $captureContext,
+                    'checkout_url' => $checkoutUrl,
                 ],
             ]);
 
@@ -100,10 +121,7 @@ class SafePayService
                     'status' => $newPayment->status,
                     'tracker' => $tracker,
                 ],
-                'capture_context' => data_get(
-                    $captureContext,
-                    'data'
-                ),
+                'checkout_url' => $checkoutUrl,
             ];
         } catch (Throwable $e) {
 
@@ -142,36 +160,11 @@ class SafePayService
                     'merchant_api_key' => $this->apiKey,
                     'intent' => 'CYBERSOURCE',
                     'mode' => 'payment',
-                    'entry_mode' => 'flex',
+                    'entry_mode' => 'raw',
                     'currency' => $currency,
                     'amount' => $amount,
                     'metadata' => $metadata,
                 ]
-            );
-
-        return $this->handleResponse($response);
-    }
-
-    /**
-     * Generate capture context.
-     *
-     * The capture context is used by the client-side
-     * Safepay/Cybersource Flex checkout.
-     */
-    public function generateCaptureContext(
-        string $tracker
-    ): array {
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'X-SFPY-MERCHANT-SECRET' => $this->merchantSecret,
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ])
-            ->withBody('{}', 'application/json')
-            ->post(
-                $this->baseUrl.
-                    '/order/payments/v3/'.
-                    $tracker
             );
 
         return $this->handleResponse($response);
@@ -269,5 +262,74 @@ class SafePayService
                 ' '.
                 $response->body()
         );
+    }
+
+    private function generatePassportToken(): string
+    {
+        $response = Http::timeout(30)
+            ->withHeaders([
+                'X-SFPY-MERCHANT-SECRET' => $this->merchantSecret,
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])
+            ->post(
+                $this->baseUrl.
+                    '/client/passport/v1/token'
+            );
+
+        $result = $this->handleResponse($response);
+
+        $token = data_get($result, 'data');
+
+        if (! is_string($token) || $token === '') {
+            throw new RuntimeException(
+                'Safepay passport token missing.'
+            );
+        }
+
+        return $token;
+    }
+
+    private function buildCheckoutUrl(
+        string $tracker,
+        Order $order
+    ): string {
+        $isSandbox = str_contains(
+            $this->baseUrl,
+            'sandbox'
+        );
+
+        $checkoutBaseUrl = $isSandbox
+            ? self::SANDBOX_CHECKOUT_URL
+            : self::PRODUCTION_CHECKOUT_URL;
+
+        if (
+            ! str_starts_with($this->checkoutSuccessUrl, 'https://') ||
+            ! str_starts_with($this->checkoutCancelUrl, 'https://')
+        ) {
+            Log::warning('Safepay checkout is using non-HTTPS return URLs.', [
+                'success_url' => $this->checkoutSuccessUrl,
+                'cancel_url' => $this->checkoutCancelUrl,
+            ]);
+        }
+
+        $query = http_build_query([
+            'env' => $isSandbox ? 'sandbox' : 'production',
+            'tracker' => $tracker,
+            'source' => 'hosted',
+            'redirect_url' => $this->checkoutSuccessUrl,
+            'cancel_url' => $this->checkoutCancelUrl,
+        ]);
+
+        $checkoutUrl = $checkoutBaseUrl.'?'.$query;
+
+        Log::info('Safepay hosted checkout URL generated.', [
+            'order_id' => $order->id,
+            'order_reference' => $order->reference,
+            'tracker' => $tracker,
+            'checkout_url' => $checkoutUrl,
+        ]);
+
+        return $checkoutUrl;
     }
 }

@@ -34,8 +34,15 @@ export default function Checkout() {
                 setLoading(false);
                 toast.success(data.message);
                 console.log("data", data);
-                const paymentId = data.data.payment.id;
-                window.location.href = `/pay?payment_id=${paymentId}`;
+                const checkoutUrl = data.data.checkout_url;
+
+                if (!checkoutUrl) {
+                    toast.error("Checkout URL not available");
+
+                    return;
+                }
+
+                window.location.href = checkoutUrl;
             } else {
                 setLoading(false);
                 toast.error(data.message);
