@@ -1,173 +1,44 @@
 {
-  "success": true,
-  "message": "Ready for checkout",
-  "data": {
-    "addresses": [],
-    "cart_items": [
-      {
-        "id": 8,
-        "cart_id": 5,
-        "product_id": 4,
-        "variant_id": 8,
-        "quantity": 1,
-        "created_at": "2026-08-16T21:46:15.000000Z",
-        "updated_at": "2026-08-16T21:46:15.000000Z",
-        "product": {
-          "id": 4,
-          "shop_id": 2,
-          "sub_category_id": 19,
-          "name": "Amber Dusk Perfume",
-          "slug": "amber-dusk-perfume",
-          "description": "Demo product seeded for local development and API exploration.",
-          "specifications": "{\"brand\": \"Amber\", \"support\": \"Local support available\", \"warranty\": \"1 year\"}",
-          "price": 8900,
-          "shipping_price": 150,
-          "stock": 60,
-          "low_stock_threshold": 5,
-          "discount_type": "percentage",
-          "discount_value": 10,
-          "show_in_app": 1,
-          "is_featured": 1,
-          "status": "active",
-          "reviewed_by": "seed-bot",
-          "reviewed_at": "2026-08-15 15:53:37",
-          "rejection_reason": null,
-          "created_at": "2026-08-16T15:53:37.000000Z",
-          "updated_at": "2026-08-16T15:53:37.000000Z",
-          "is_in_cart": true,
-          "final_price": 8010,
-          "images": [
-            {
-              "id": 7,
-              "product_id": 4,
-              "image": "amber-dusk-perfume-1.jpg",
-              "alt_text": "Amber Dusk Perfume image 1",
-              "sort_order": 1,
-              "is_thumbnail": 1,
-              "created_at": "2026-08-16T15:53:37.000000Z",
-              "updated_at": "2026-08-16T15:53:37.000000Z"
-            },
-            {
-              "id": 8,
-              "product_id": 4,
-              "image": "amber-dusk-perfume-2.jpg",
-              "alt_text": "Amber Dusk Perfume image 2",
-              "sort_order": 2,
-              "is_thumbnail": 0,
-              "created_at": "2026-08-16T15:53:37.000000Z",
-              "updated_at": "2026-08-16T15:53:37.000000Z"
-            }
-          ]
+    "token": "track_0d067498-1d81-4318-b069-fd633fc75cf6",
+    "client": "sec_b8dd1d1a-df34-424c-bffd-5ec5dd86f35d",
+    "environment": "sandbox",
+    "state": "TRACKER_STARTED",
+    "payment_method_kind": "card",
+    "intent": "CYBERSOURCE",
+    "mode": "payment",
+    "entry_mode": "flex",
+    "next_actions": {
+        "CYBERSOURCE": {
+            "kind": "GENERATE_CAPTURE_CONTEXT"
         },
-        "variant": {
-          "id": 8,
-          "product_id": 4,
-          "variant_option_ids": [
-            28
-          ],
-          "price": 16900,
-          "stock": 14,
-          "created_at": "2026-08-16T15:53:37.000000Z",
-          "updated_at": "2026-08-16T15:53:37.000000Z",
-          "variant_options_summary": "Pack Size: 2 Pack",
-          "is_in_cart": true,
-          "final_price": 15210,
-          "product": {
-            "id": 4,
-            "shop_id": 2,
-            "sub_category_id": 19,
-            "name": "Amber Dusk Perfume",
-            "slug": "amber-dusk-perfume",
-            "description": "Demo product seeded for local development and API exploration.",
-            "specifications": "{\"brand\": \"Amber\", \"support\": \"Local support available\", \"warranty\": \"1 year\"}",
-            "price": 8900,
-            "shipping_price": 150,
-            "stock": 60,
-            "low_stock_threshold": 5,
-            "discount_type": "percentage",
-            "discount_value": 10,
-            "show_in_app": 1,
-            "is_featured": 1,
-            "status": "active",
-            "reviewed_by": "seed-bot",
-            "reviewed_at": "2026-08-15 15:53:37",
-            "rejection_reason": null,
-            "created_at": "2026-08-16T15:53:37.000000Z",
-            "updated_at": "2026-08-16T15:53:37.000000Z",
-            "is_in_cart": true,
-            "final_price": 8010
-          }
+        "MPGS": {
+            "kind": "NOOP"
+        },
+        "PAYFAST": {
+            "kind": "NOOP"
+        },
+        "RAAST": {
+            "kind": "NOOP"
         }
-      }
-    ],
-    "payment_methods": [
-      {
-        "id": 1,
-        "name": "Visa",
-        "code": "visa",
-        "icon": "visa.png",
-        "fee_type": "percentage",
-        "fee_value": 1.5,
-        "sort_order": 1,
-        "is_active": 1,
-        "created_at": "2026-08-16T15:53:36.000000Z",
-        "updated_at": "2026-08-16T15:53:36.000000Z"
-      },
-      {
-        "id": 2,
-        "name": "Mastercard",
-        "code": "mastercard",
-        "icon": "mastercard.png",
-        "fee_type": "percentage",
-        "fee_value": 1.5,
-        "sort_order": 2,
-        "is_active": 1,
-        "created_at": "2026-08-16T15:53:36.000000Z",
-        "updated_at": "2026-08-16T15:53:36.000000Z"
-      },
-      {
-        "id": 3,
-        "name": "Cash on Delivery",
-        "code": "cash_on_delivery",
-        "icon": "cash_on_delivery.png",
-        "fee_type": "fixed",
-        "fee_value": 0,
-        "sort_order": 3,
-        "is_active": 1,
-        "created_at": "2026-08-16T15:53:36.000000Z",
-        "updated_at": "2026-08-16T15:53:36.000000Z"
-      },
-      {
-        "id": 4,
-        "name": "Safepay",
-        "code": "safepay",
-        "icon": "safepay.png",
-        "fee_type": "percentage",
-        "fee_value": 2.5,
-        "sort_order": 4,
-        "is_active": 1,
-        "created_at": "2026-08-16T15:53:36.000000Z",
-        "updated_at": "2026-08-16T15:53:36.000000Z"
-      },
-      {
-        "id": 5,
-        "name": "Jazzcash",
-        "code": "jazzcash",
-        "icon": "jazzcash.png",
-        "fee_type": "percentage",
-        "fee_value": 2.5,
-        "sort_order": 5,
-        "is_active": 1,
-        "created_at": "2026-08-16T15:53:36.000000Z",
-        "updated_at": "2026-08-16T15:53:36.000000Z"
-      }
-    ],
-    "bill": {
-      "subtotal": 16900,
-      "shipping_fees": 150,
-      "tax": 0,
-      "discount": 1690,
-      "total_amount": 15360
+    },
+    "purchase_totals": {
+        "quote_amount": {
+            "currency": "PKR",
+            "amount": 816000
+        },
+        "base_amount": {
+            "currency": "PKR",
+            "amount": 816000
+        },
+        "conversion_rate": {
+            "base_currency": "PKR",
+            "quote_currency": "PKR",
+            "rate": 1
+        }
+    },
+    "metadata": {
+        "data": {
+            "order_id": "22"
+        }
     }
-  }
 }

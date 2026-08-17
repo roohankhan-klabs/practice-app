@@ -15,11 +15,13 @@ use Illuminate\Database\Eloquent\Model;
         'status',
         'response',
         'paid_at',
+        'tracker'
     ]
 )]
 class Payment extends Model
 {
     protected $casts = [
+        'tracker' => 'array',
         'response' => 'array',
         'paid_at' => 'datetime',
     ];

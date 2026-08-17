@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use RuntimeException;
 use Throwable;
 
-class SafepayService
+class SafePayService
 {
     private string $baseUrl;
 
@@ -60,7 +60,7 @@ class SafepayService
                 currency: 'PKR',
                 metadata: [
                     'order_id' => (string) $order->id,
-                    'payment_id' => (string) $newPayment->id,
+                    // 'payment_id' => (string) $newPayment->id,
                 ],
             );
             $tracker = data_get(
@@ -75,16 +75,17 @@ class SafepayService
             }
 
             $newPayment->update([
-                'transaction_id' => $tracker,
+                'tracker' => $tracker,
                 'status' => PaymentStatus::PROCESSING,
                 'response' => $result,
             ]);
             $captureContext =
                 $this->generateCaptureContext(
-                    $tracker
+                    $tracker['token']
                 );
 
             return response()->json([
+                'success' => true,
                 'message' => 'Safepay payment initialized.',
                 'payment' => [
                     'id' => $newPayment->id,
@@ -105,6 +106,7 @@ class SafepayService
             report($e);
 
             return response()->json([
+                'success' => false,
                 'message' => 'Unable to initialize payment.',
                 'error' => $e->getMessage(),
             ], 500);
@@ -131,7 +133,7 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl.'/order/payments/v3/',
+                $this->baseUrl . '/order/payments/v3/',
                 [
                     'merchant_api_key' => $this->apiKey,
                     'intent' => 'CYBERSOURCE',
@@ -162,8 +164,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl.
-                    '/order/payments/v3/'.
+                $this->baseUrl .
+                    '/order/payments/v3/' .
                     $tracker,
                 [
                     'payload' => [
@@ -190,8 +192,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl.
-                    '/order/payments/v3/'.
+                $this->baseUrl .
+                    '/order/payments/v3/' .
                     $tracker,
                 [
                     'payload' => [
@@ -221,8 +223,8 @@ class SafepayService
                 'Content-Type' => 'application/json',
             ])
             ->post(
-                $this->baseUrl.
-                    '/order/payments/v3/'.
+                $this->baseUrl .
+                    '/order/payments/v3/' .
                     $tracker,
                 [
                     'payload' => [
@@ -247,8 +249,8 @@ class SafepayService
                 'Accept' => 'application/json',
             ])
             ->get(
-                $this->baseUrl.
-                    '/order/payments/v3/'.
+                $this->baseUrl .
+                    '/order/payments/v3/' .
                     $tracker
             );
 
@@ -258,14 +260,13 @@ class SafepayService
     private function handleResponse(Response $response): array
     {
         if ($response->successful()) {
-            
             return $response->json();
         }
 
         throw new RuntimeException(
-            'Safepay API error: '.
-                $response->status().
-                ' '.
+            'Safepay API error: ' .
+                $response->status() .
+                ' ' .
                 $response->body()
         );
     }
