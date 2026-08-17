@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react";
+import StorefrontHeader from "@/components/storefront-header";
 import {
     Search, Store, ShoppingBag, FolderOpen, LogOut, ArrowRight,
     Star, MessageSquare, PhoneCall, Heart, Sparkles, Compass
@@ -125,46 +126,11 @@ export default function Welcome() {
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans">
             {/* Header Navigation */}
-            <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
-                <div className="mx-auto flex max-w-7xl h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-2.5">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-xs">
-                            <Store className="h-4.5 w-4.5" />
-                        </div>
-                        <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-                            NexusMarket
-                        </span>
-                    </div>
-
-                    {/* Inline Search Bar on Header (hidden on mobile, shown on desktop) */}
-                    <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
-                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                        <Input
-                            placeholder="Search categories, products, shops..."
-                            className="pl-9 bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 focus:bg-white focus:dark:bg-slate-950"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                        <Link href="/dashboard">
-                            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
-                                Dashboard
-                            </Button>
-                        </Link>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleLogout}
-                            className="text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white flex items-center gap-1.5"
-                        >
-                            <LogOut className="h-3.5 w-3.5" />
-                            Log Out
-                        </Button>
-                    </div>
-                </div>
-            </header>
+            <StorefrontHeader 
+                searchQuery={searchQuery} 
+                setSearchQuery={setSearchQuery} 
+                showSearch={true} 
+            />
 
             {/* Hero Section */}
             <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-indigo-50/50 via-white to-slate-50 dark:from-indigo-950/20 dark:via-slate-950 dark:to-slate-950 border-b border-slate-200 dark:border-slate-900">

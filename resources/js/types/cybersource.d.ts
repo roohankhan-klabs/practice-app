@@ -34,7 +34,7 @@ export interface CybersourceMicroform {
 
 export interface CybersourceField {
     load(
-        selector: string
+        selector: string | HTMLElement
     ): void;
 
     unload(): void;

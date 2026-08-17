@@ -16,7 +16,7 @@ class WishlistController extends Controller
 
     public function index(Request $request)
     {
-        $wishlist = $request->user()->wishlist()->with('product');
+        $wishlist = $request->user()->wishlist()->with('product.variants')->get();
 
         return $this->formatResponse('Wishlist fetched successfully', $wishlist);
     }
@@ -25,7 +25,14 @@ class WishlistController extends Controller
     {
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
+            'variant_id' => 'nullable|exists:variants,id',
+            'quantity' => 'nullable|integer|min:1',
         ]);
+
+        if (! isset($validated['quantity'])) {
+            $validated['quantity'] = 1;
+        }
+
         $cartItem = $this->cartService->addItemToCart($request, $validated);
 
         return $this->formatResponse('Item added to cart successfully', $cartItem);
@@ -54,14 +61,16 @@ class WishlistController extends Controller
             'product_ids' => 'required|array',
             'product_ids.*' => 'exists:products,id',
         ]);
-        $wishlist = $request->user()->wishlist()
-            ->whereIn('product_id', $validated['product_ids'])
-            ->get();
-        if ($wishlist->isEmpty()) {
-            return $this->formatResponse('Wishlist not found', null, 404);
-        }
-        $wishlist->delete();
 
-        return $this->formatResponse('Removed all items from wishlist successfully', $wishlist);
+        $wishlistQuery = $request->user()->wishlist()->whereIn('product_id', $validated['product_ids']);
+        $wishlistItems = $wishlistQuery->get();
+
+        if ($wishlistItems->isEmpty()) {
+            return $this->formatResponse('Wishlist items not found', null, 404);
+        }
+
+        $wishlistQuery->delete();
+
+        return $this->formatResponse('Removed all items from wishlist successfully', $wishlistItems);
     }
 }

@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react";
+import StorefrontHeader from "@/components/storefront-header";
 import { useEffect, useState } from "react";
 import type { Product as ProductType, Variant } from "../interfaces/global";
 import { 
@@ -132,6 +133,7 @@ export default function Product({ id }: ProductProps) {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans pb-16">
+            <StorefrontHeader />
             {/* Header Breadcrumbs / Top Navigation */}
             <div className="border-b border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 px-4 sm:px-6 lg:px-8 py-4">
                 <div className="mx-auto max-w-5xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
