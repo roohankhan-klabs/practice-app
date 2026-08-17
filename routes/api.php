@@ -83,5 +83,10 @@ Route::prefix('v1')->group(function () {
 
         Route::post('ready-for-checkout', [OrderController::class, 'readyForCheckout']);
         Route::post('checkout', [OrderController::class, 'checkout']);
+
+        Route::prefix('orders')->group(function () {
+            Route::get('/', [OrderController::class, 'index']);
+            Route::get('/{orderId}', [OrderController::class, 'show']);
+        });
     });
 });

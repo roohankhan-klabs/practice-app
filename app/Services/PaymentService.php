@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\PaymentStatus;
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
@@ -24,7 +25,7 @@ class PaymentService
         $payment = new Payment;
         foreach ($orders as $order) {
             if ($validated['payment_method_id'] == PaymentMethod::CASH_ON_DELIVERY) {
-                return $this->payWithCashOnDelivery($order, $payment);
+                return $this->payWithCashOnDelivery($order, $payment, $validated);
             } elseif ($validated['payment_method_id'] == PaymentMethod::JAZZCASH) {
                 return $this->payWithJazzcash($order, $payment);
             } elseif ($validated['payment_method_id'] == PaymentMethod::SAFEPAY) {
@@ -33,9 +34,9 @@ class PaymentService
         }
     }
 
-    public function payWithCashOnDelivery(Order $order, Payment $payment)
+    public function payWithCashOnDelivery(Order $order, Payment $payment, array $validated)
     {
-        $transaction_id = 'TXN-'.strtoupper(Str::random(12));
+        $transaction_id = 'TXN-' . strtoupper(Str::random(12));
         $payment = $payment::create([
             'order_id' => $order->id,
             'payment_method_id' => PaymentMethod::CASH_ON_DELIVERY,
@@ -48,6 +49,8 @@ class PaymentService
             'payment_id' => $payment->id,
             'status' => Order::PENDING,
         ]);
+
+        CartItem::whereIn('id', $validated['cart_item_ids'])->delete();
 
         return $payment;
     }

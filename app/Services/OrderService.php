@@ -12,6 +12,18 @@ use Illuminate\Support\Str;
 
 class OrderService
 {
+    public function getUserOrders(Request $request)
+    {
+        $orders = Order::with('orderItems')->where('user_id', $request->user()->id)->get();
+        return $orders;
+    }
+
+    public function getUserOrder(Request $request, int $orderId)
+    {
+        $order = Order::with('orderItems.product', 'orderItems.variant')->where('user_id', $request->user()->id)->find($orderId);
+        return $order;
+    }
+
     public function calculateTotal(Collection $cartItems): array
     {
         $subtotal = 0;
@@ -120,10 +132,6 @@ class OrderService
 
                 $orders->push($order);
             }
-
-            // Remove items that were successfully checked out
-            CartItem::whereIn('id', $validated['cart_item_ids'])->delete();
-
             return $orders;
         });
     }

@@ -258,6 +258,7 @@ class SafepayService
     private function handleResponse(Response $response): array
     {
         if ($response->successful()) {
+            
             return $response->json();
         }
 

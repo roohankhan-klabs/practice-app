@@ -136,3 +136,49 @@ export interface Cart {
     product: Product,
     variant: Variant
 }
+
+export interface Bill {
+    subtotal: number,
+    shipping_fees: number,
+    tax: number,
+    discount: number,
+    total_amount: number
+}
+export interface PaymentMethod {
+    id: number,
+    name: string,
+    code: string,
+    icon: string,
+    fee_type: string,
+    fee_value: number,
+    sort_order: number,
+    is_active: boolean,
+    created_at: string,
+    updated_at: string
+}
+export interface CartItem {
+    id: number,
+    cart_id: number,
+    product_id: number,
+    variant_id: number,
+    quantity: number,
+    created_at: string,
+    updated_at: string,
+    product: Product,
+    variant: Variant
+}
+
+export interface Address {
+    user_id: number,
+    address_line_1: string,
+    address_line_2: string,
+    preffered_contact_number: string,
+    postal_code: string,
+    city_id: number,
+    state_id: number,
+    country_id: number,
+    is_default: boolean,
+    updated_at: string,
+    created_at: string,
+    id: number
+}

@@ -128,6 +128,6 @@ class CartService
             return new Collection;
         }
 
-        return CartItem::where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->get();
+        return CartItem::where('cart_id', $cart->id)->whereIn('id', $cartItemIds)->with(['product.images', 'variant'])->get();
     }
 }

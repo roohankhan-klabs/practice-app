@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Address;
 use App\Models\PaymentMethod;
 use App\Services\AddressService;
 use App\Services\CartService;
@@ -18,6 +19,24 @@ class OrderController extends Controller
         private PaymentService $paymentService,
         private OrderService $orderService
     ) {}
+
+    public function index(Request $request): JsonResponse
+    {
+        $orders = $this->orderService->getUserOrders($request);
+        return $this->formatResponse('Orders fetched successfully', [
+            'orders' => $orders,
+        ]);
+    }
+    public function show(Request $request, $orderId): JsonResponse
+    {
+        $order = $this->orderService->getUserOrder($request, $orderId);
+        if (! $order) {
+            return $this->formatError('Order not found', 404);
+        }
+        return $this->formatResponse('Order fetched successfully', [
+            'order' => $order,
+        ]);
+    }
 
     public function checkout(Request $request): JsonResponse
     {
@@ -60,9 +79,11 @@ class OrderController extends Controller
         if ($cartItems->isEmpty()) {
             return $this->formatError('Cart items not found', 404);
         }
+        $addresses = Address::where('user_id', $request->user()->id)->get();
         $paymentMethods = PaymentMethod::where('is_active', true)->get();
         $bill = $this->orderService->calculateTotal($cartItems);
         return $this->formatResponse('Ready for checkout', [
+            'addresses' => $addresses,
             'cart_items' => $cartItems,
             'payment_methods' => $paymentMethods,
             'bill' => $bill,

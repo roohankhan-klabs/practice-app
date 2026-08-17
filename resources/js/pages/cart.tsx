@@ -74,24 +74,8 @@ export default function Cart() {
         }
     }
 
-    async function readyForCheckout(cartItemIds: number[]) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/ready-for-checkout`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify({ cart_item_ids: cartItemIds }),
-            });
-            const data = await response.json();
-            console.log(data);
-            toast.success(data.message);
-            // window.location.href = "/checkout";
-        } catch (error) {
-            console.error('Error checking out:', error);
-        }
+    async function redirectToCheckout(cartItemIds: number[]) {
+        router.visit(`/checkout?items=${cartItemIds.join(',')}`);
     }
 
     async function clearCart() {
@@ -151,7 +135,7 @@ export default function Cart() {
                 <p>Subtotal: {subtotal}</p>
                 <p>Discount: {discount}</p>
                 <p>Total: {total}</p>
-                <button className={`bg-green-500 text-white px-4 py-2 rounded-md ${selectedCartItems.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={selectedCartItems.length === 0} onClick={() => readyForCheckout(selectedCartItems)}>Checkout</button>
+                <button className={`bg-green-500 text-white px-4 py-2 rounded-md ${selectedCartItems.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={selectedCartItems.length === 0} onClick={() => redirectToCheckout(selectedCartItems)}>Checkout</button>
             </div>
         </>
     );

@@ -10,6 +10,7 @@ use Inertia\Inertia;
 Route::inertia('/', 'home')->name('home');
 Route::inertia('/welcome', 'welcome')->name('welcome');
 Route::inertia('/cart', 'cart')->name('cart');
+Route::inertia('/checkout', 'checkout')->name('checkout');
 
 Route::get('/categories/{id}', function ($id) {
     return Inertia::render('category', [
