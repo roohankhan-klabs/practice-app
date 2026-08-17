@@ -1,0 +1,4 @@
+Framing 'https://testflex.cybersource.com/' violates the following Content Security Policy directive: "frame-ancestors https://sandbox.api.getsafepay.com". The request has been blocked.
+
+Framing 'https://testflex.cybersource.com/' violates the following Content Security Policy directive: "frame-ancestors https://sandbox.api.getsafepay.com". The request has been blocked.
+

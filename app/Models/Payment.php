@@ -29,4 +29,20 @@ class Payment extends Model
     {
         return $this->belongsTo(PaymentMethod::class);
     }
+    public function paymentOrders()
+    {
+        return $this->hasMany(PaymentOrder::class);
+    }
+
+    public function order()
+    {
+        return $this->hasOneThrough(
+            Order::class,
+            PaymentOrder::class,
+            'payment_id',
+            'id',
+            'id',
+            'order_id'
+        );
+    }
 }

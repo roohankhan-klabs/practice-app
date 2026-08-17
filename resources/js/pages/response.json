@@ -1,90 +1,153 @@
-[
-    {
-        "token": "track_0d067498-1d81-4318-b069-fd633fc75cf6",
-        "client": "sec_b8dd1d1a-df34-424c-bffd-5ec5dd86f35d",
-        "environment": "sandbox",
-        "state": "TRACKER_STARTED",
-        "payment_method_kind": "card",
-        "intent": "CYBERSOURCE",
-        "mode": "payment",
-        "entry_mode": "flex",
-        "next_actions": {
-            "CYBERSOURCE": {
+{
+  "success": true,
+  "message": "Payment found.",
+  "data": {
+    "id": 5,
+    "payment_method_id": 4,
+    "transaction_id": null,
+    "tracker": "track_6bcc2b33-04cc-4b85-a380-448af32f7b9d",
+    "amount": "33549.1",
+    "currency": "PKR",
+    "status": "processing",
+    "response": {
+      "tracker": {
+        "data": {
+          "tracker": {
+            "mode": "payment",
+            "state": "TRACKER_STARTED",
+            "token": "track_6bcc2b33-04cc-4b85-a380-448af32f7b9d",
+            "client": "sec_b8dd1d1a-df34-424c-bffd-5ec5dd86f35d",
+            "intent": "CYBERSOURCE",
+            "metadata": {
+              "data": {
+                "order_id": "5"
+              }
+            },
+            "entry_mode": "flex",
+            "environment": "sandbox",
+            "next_actions": {
+              "MPGS": {
+                "kind": "NOOP"
+              },
+              "RAAST": {
+                "kind": "NOOP"
+              },
+              "PAYFAST": {
+                "kind": "NOOP"
+              },
+              "CYBERSOURCE": {
                 "kind": "GENERATE_CAPTURE_CONTEXT"
+              }
             },
-            "MPGS": {
-                "kind": "NOOP"
-            },
-            "PAYFAST": {
-                "kind": "NOOP"
-            },
-            "RAAST": {
-                "kind": "NOOP"
-            }
-        },
-        "purchase_totals": {
-            "quote_amount": {
-                "currency": "PKR",
-                "amount": 816000
-            },
-            "base_amount": {
-                "currency": "PKR",
-                "amount": 816000
-            },
-            "conversion_rate": {
-                "base_currency": "PKR",
-                "quote_currency": "PKR",
-                "rate": 1
-            }
-        },
-        "metadata": {
-            "data": {
-                "order_id": "22"
-            }
-        }
-    },
-    {
-        "mode": "payment",
-        "state": "TRACKER_STARTED",
-        "token": "track_4fea988b-7ec8-4b3e-8c0d-9b7ffed373b7",
-        "client": "sec_b8dd1d1a-df34-424c-bffd-5ec5dd86f35d",
-        "intent": "CYBERSOURCE",
-        "metadata": {
-            "data": {
-                "order_id": "28"
-            }
-        },
-        "entry_mode": "flex",
-        "environment": "sandbox",
-        "next_actions": {
-            "MPGS": {
-                "kind": "NOOP"
-            },
-            "RAAST": {
-                "kind": "NOOP"
-            },
-            "PAYFAST": {
-                "kind": "NOOP"
-            },
-            "CYBERSOURCE": {
-                "kind": "GENERATE_CAPTURE_CONTEXT"
-            }
-        },
-        "purchase_totals": {
-            "base_amount": {
-                "amount": 816000,
+            "purchase_totals": {
+              "base_amount": {
+                "amount": 3354910,
                 "currency": "PKR"
-            },
-            "quote_amount": {
-                "amount": 816000,
+              },
+              "quote_amount": {
+                "amount": 3354910,
                 "currency": "PKR"
-            },
-            "conversion_rate": {
+              },
+              "conversion_rate": {
                 "rate": 1,
                 "base_currency": "PKR",
                 "quote_currency": "PKR"
-            }
+              }
+            },
+            "payment_method_kind": "card"
+          },
+          "capabilities": {
+            "MPGS": true,
+            "RAAST": true,
+            "PAYFAST": true,
+            "CYBERSOURCE": true
+          }
         },
-        "payment_method_kind": "card"
+        "status": {
+          "errors": [],
+          "message": "success"
+        }
+      },
+      "capture_context": {
+        "data": {
+          "action": {
+            "flex": {
+              "origin": "https://sandbox.api.getsafepay.com",
+              "capture_context_jwt": "eyJraWQiOiJ6dSIsImFsZyI6IlJTMjU2In0.eyJmbHgiOnsicGF0aCI6Ii9mbGV4L3YyL3Rva2VucyIsImRhdGEiOiIyQ2d4MHR2aGprNDFNTVhZUE4tejF3OGJ5eUlOXzItWEs2NjZDYnRYWWVkbzhaWXdDMTMtTXhCSXlWSHlLUjJqVlFMbkg5djFKb0xZa0pSTVR0U25qZUtTc1dlMEREMlYzblVrNXFSODZVSEVyREticWNEbjltcEhTSUFZU29VanFNbU4wYUJCOUtSZWptajFHVjFkMlQwZkdkbHo0eTNwQ1h2aGVNaThYYjM1TWduRHRDbnQxakZVaFc2a25oODlpTDdMMVdka0RoVDY1MmN2Z3hJYVJxUUxrT0xvRG02Z0MwSVx1MDAzZCIsIm9yaWdpbiI6Imh0dHBzOi8vdGVzdGZsZXguY3liZXJzb3VyY2UuY29tIiwidG9rZW5zVXJsIjoiaHR0cHM6Ly90ZXN0ZmxleC5jeWJlcnNvdXJjZS5jb20vZmxleC92Mi90b2tlbnMiLCJqd2siOnsia3R5IjoiUlNBIiwiZSI6IkFRQUIiLCJ1c2UiOiJlbmMiLCJuIjoibmtrcFg3aW1kNTBUUDhMd3pWaVZiZzVTdkcxWExkUHJMZE1vMllwTE1LSVFzSWVmNEVsR2U4aFdfUmRsR3J6UDFNUy1WeE5fdjE4OTQzZ3liVU5KOHRMSWlTTWtZTk51UGVZM3BkbE00b1cxdzFmVnJsM2o3OEtKUDZXbEJrZWt6YXZvalNsWmgxN29QLVZ5WDhRdVM3a05qQmlVWVpoME1RMVQ4MFVVQnVnNURPXzhBbkc2YllvQUFTeDE0QjY5TnZiWlVoTzhHS3dGV0FnRF83Uk5BSkxCUExvWmM1dEoxMzNUbUtVR2hzT2JBYkxlVnB6bEUtT3phbDdRS016OXhYcXRyNkhVTWFwZF8ybEtkXzViWlJWMkItWURuMEdRbDh3NUNpcjE0Q0Z2THFZdHZ6Q2FnQnRveHNKS0pTVDFsNGJEdWFiRGNyNF9LTjk5LVhTbFN3Iiwia2lkIjoiMDhJOUxhMlhSRFJxWjZQQk1PclFsRGVmN3FOWURzclEifX0sImN0eCI6W3siZGF0YSI6eyJjbGllbnRMaWJyYXJ5SW50ZWdyaXR5Ijoic2hhMjU2LTRUVUtCZDNWTUlHR05zMVpMemZVNmJHMFlHNGtVU2NTT3RQdTVlYzdZZ29cdTAwM2QiLCJjbGllbnRMaWJyYXJ5IjoiaHR0cHM6Ly90ZXN0ZmxleC5jeWJlcnNvdXJjZS5jb20vbWljcm9mb3JtL2J1bmRsZS92Mi4wLjIvZmxleC1taWNyb2Zvcm0ubWluLmpzIiwiYWxsb3dlZENhcmROZXR3b3JrcyI6WyJWSVNBIiwiTUFTVEVSQ0FSRCJdLCJjbGllbnRWZXJzaW9uIjoidjIuMCIsInRhcmdldE9yaWdpbnMiOlsiaHR0cHM6Ly9zYW5kYm94LmFwaS5nZXRzYWZlcGF5LmNvbSJdLCJtZk9yaWdpbiI6Imh0dHBzOi8vdGVzdGZsZXguY3liZXJzb3VyY2UuY29tIn0sInR5cGUiOiJtZi0yLjAuMCJ9XSwiaXNzIjoiRmxleCBBUEkiLCJleHAiOjE3ODY5NzM4NTUsImlhdCI6MTc4Njk3Mjk1NSwianRpIjoiRXhqZHRVSXZVbDY4Mmw2WiJ9.A65TjAMVGFG0QfQOUA61Ft1GpoUqkPVURkTPg4GeEvoxS0gRk0P1_riAnhKE8mYyRbeGSFTrxwQb6gA9VtVLimCB48mGgZG_ERzM9MVMR3pakS70YbyVSfOrlWkMiFxcDoAw19nU0x5l61nDGNpStsyh11uXwTXAk0pzOgAZu-YdSyB459PsmmtCu_w7jqZ3611mQgybptRGvtMCRFsCURpP9QKOoH4PxjcteMfJtgLOjdgwI_UKjy6fnK4dLdr9L23ifOZfjbINd1EV99f9Q61GuXw1_azoHONNK5y7dcD8-iV8jfK3dnSwPcQZbMiEvT7WXqgEEc6Y-3Ku4dZrlw"
+            },
+            "token": "req_ef4a96fa-f3d5-42ea-ad92-f30deb0def23"
+          },
+          "tracker": {
+            "mode": "payment",
+            "state": "TRACKER_STARTED",
+            "token": "track_6bcc2b33-04cc-4b85-a380-448af32f7b9d",
+            "client": "sec_b8dd1d1a-df34-424c-bffd-5ec5dd86f35d",
+            "intent": "CYBERSOURCE",
+            "metadata": {
+              "data": {
+                "order_id": "5"
+              }
+            },
+            "entry_mode": "flex",
+            "environment": "sandbox",
+            "next_actions": {
+              "MPGS": {
+                "kind": "NOOP"
+              },
+              "RAAST": {
+                "kind": "NOOP"
+              },
+              "PAYFAST": {
+                "kind": "NOOP"
+              },
+              "CYBERSOURCE": {
+                "kind": "PROCESS_TRANSIENT_TOKEN",
+                "request_id": "req_ef4a96fa-f3d5-42ea-ad92-f30deb0def23"
+              }
+            },
+            "purchase_totals": {
+              "base_amount": {
+                "amount": 3354910,
+                "currency": "PKR"
+              },
+              "quote_amount": {
+                "amount": 3354910,
+                "currency": "PKR"
+              },
+              "conversion_rate": {
+                "rate": 1,
+                "base_currency": "PKR",
+                "quote_currency": "PKR"
+              }
+            },
+            "payment_method_kind": "card"
+          }
+        },
+        "status": {
+          "errors": [],
+          "message": "success"
+        }
+      }
+    },
+    "paid_at": null,
+    "created_at": "2026-08-17T13:22:33.000000Z",
+    "updated_at": "2026-08-17T13:22:35.000000Z",
+    "order": {
+      "id": 5,
+      "user_id": 10,
+      "address_id": 9,
+      "shop_id": 1,
+      "payment_id": null,
+      "reference": "ORD-ISF1GFMQJGW1",
+      "subtotal": 36999,
+      "shipping_fees": 250,
+      "tax": 0,
+      "discount": 3699.9,
+      "total_amount": 33549.1,
+      "status": "initialized",
+      "created_at": "2026-08-17T13:22:33.000000Z",
+      "updated_at": "2026-08-17T13:22:33.000000Z",
+      "laravel_through_key": 5
     }
-]
+  }
+}

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('payment_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
     }

@@ -9,9 +9,6 @@ import type {
 } from '@/types/cybersource';
 
 export default function Pay() {
-    const [paymentId, setPaymentId] =
-        useState<number | null>(null);
-
     const cardNumberRef =
         useRef<HTMLDivElement | null>(null);
 
@@ -393,8 +390,8 @@ export default function Pay() {
                 `/api/v1/payments/${currentPaymentId}`,
                 {
                     headers: {
-                        Accept:
-                            'application/json',
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 }
             );
@@ -416,11 +413,7 @@ export default function Pay() {
                 result.data;
 
             const jwt =
-                payment
-                    ?.capture_context
-                    ?.action
-                    ?.flex
-                    ?.capture_context_jwt;
+                payment.response?.capture_context?.data?.action?.flex?.capture_context_jwt;
 
             if (!jwt) {
                 throw new Error(

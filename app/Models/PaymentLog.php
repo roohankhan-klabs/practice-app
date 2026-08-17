@@ -23,6 +23,15 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class PaymentLog extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'payload' => 'array',
+            'response' => 'array',
+            'paid_at' => 'datetime',
+        ];
+    }
+
     public function payment()
     {
         return $this->belongsTo(Payment::class);

@@ -14,7 +14,7 @@ class PaymentController extends Controller
     public function show(Request $request, int $paymentId)
     {
         $payment = Payment::where('id', $paymentId)->first();
-        if ($payment->order->user_id !== $request->user()->id) {
+        if (! $payment || ! $payment->order || $payment->order->user_id !== $request->user()->id) {
             return $this->formatError('Payment not found', 404);
         }
         return $this->formatResponse('Payment found.', $payment);
