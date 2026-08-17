@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Vendors\RelationManagers;
 
-use App\Filament\Resources\Vendors\VendorResource;
-use Filament\Actions\CreateAction;
+use App\Filament\Resources\Shops\ShopResource;
+use App\Filament\Resources\Shops\Tables\ShopsTable;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 
@@ -11,13 +11,10 @@ class ShopsRelationManager extends RelationManager
 {
     protected static string $relationship = 'shops';
 
-    protected static ?string $relatedResource = VendorResource::class;
+    protected static ?string $relatedResource = ShopResource::class;
 
     public function table(Table $table): Table
     {
-        return $table
-            ->headerActions([
-                CreateAction::make(),
-            ]);
+        return ShopsTable::configure($table);
     }
 }

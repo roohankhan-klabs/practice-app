@@ -37,4 +37,10 @@ use Illuminate\Database\Eloquent\Model;
         'last_activity_at',
     ]
 )]
-class Device extends Model {}
+class Device extends Model
+{
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'device_users');
+    }
+}

@@ -58,7 +58,7 @@ class User extends Authenticatable implements PasskeyUser
 
     public function devices()
     {
-        return $this->hasMany(DeviceUser::class);
+        return $this->belongsToMany(Device::class, 'device_users');
     }
 
     public function role()

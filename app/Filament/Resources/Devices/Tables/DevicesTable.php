@@ -39,6 +39,10 @@ class DevicesTable
                 TextColumn::make('last_activity_at')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('users.name')
+                    ->label('Associated Users')
+                    ->badge()
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

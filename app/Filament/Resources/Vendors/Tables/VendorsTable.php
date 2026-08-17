@@ -37,11 +37,25 @@ class VendorsTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('status'),
-                // ->badge()
-                // ->state(fn($state) => $state === 'active' ? 'Active' : 'Inactive')
-                // ->color(fn($state) => $state === 'active' ? 'success' : 'danger'),
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'active' => 'success',
+                        'inactive' => 'warning',
+                        'suspended', 'blocked' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->searchable(),
                 TextColumn::make('role.name')
+                    ->label('Role')
+                    ->searchable(),
+                TextColumn::make('shops.shop_name')
+                    ->label('Owned Shops')
+                    ->badge()
+                    ->searchable(),
+                TextColumn::make('devices.device_name')
+                    ->label('Devices')
+                    ->badge()
                     ->searchable(),
             ])
             ->filters([])

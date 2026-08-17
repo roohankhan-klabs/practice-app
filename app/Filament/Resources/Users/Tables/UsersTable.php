@@ -36,8 +36,20 @@ class UsersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'active' => 'success',
+                        'inactive' => 'warning',
+                        'suspended', 'blocked' => 'danger',
+                        default => 'secondary',
+                    })
                     ->searchable(),
-                TextColumn::make('role_id')
+                TextColumn::make('role.name')
+                    ->label('Role')
+                    ->searchable(),
+                TextColumn::make('devices.device_name')
+                    ->label('Devices')
+                    ->badge()
                     ->searchable(),
             ])
             ->filters([
