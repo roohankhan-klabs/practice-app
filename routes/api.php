@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\InitController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymentMethodController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SettingController;
@@ -83,10 +84,15 @@ Route::prefix('v1')->group(function () {
 
         Route::post('ready-for-checkout', [OrderController::class, 'readyForCheckout']);
         Route::post('checkout', [OrderController::class, 'checkout']);
+        Route::post('safepay/transient-token', [PaymentController::class, 'handleTransientToken']);
 
         Route::prefix('orders')->group(function () {
             Route::get('/', [OrderController::class, 'index']);
             Route::get('/{orderId}', [OrderController::class, 'show']);
+        });
+
+        Route::prefix('payments')->group(function () {
+            Route::get('/{paymentId}', [PaymentController::class, 'show']);
         });
     });
 });

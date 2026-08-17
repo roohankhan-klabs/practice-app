@@ -87,7 +87,6 @@ class DemoOrderSeeder extends Seeder
                 $paymentStatus = in_array($orderData['status'], [Order::PROCESSING, Order::DELIVERED], true) ? 'paid' : 'pending';
                 $payment = Payment::query()->firstOrNew(['transaction_id' => 'txn-'.$orderData['reference']]);
                 $payment->forceFill([
-                    'order_id' => $order->id,
                     'payment_method_id' => $paymentMethods[$orderData['payment_method']],
                     'transaction_id' => 'txn-'.$orderData['reference'],
                     'amount' => $total,
@@ -112,8 +111,8 @@ class DemoOrderSeeder extends Seeder
                         'amount' => $total,
                         'currency' => 'USD',
                         'status' => $payment->status,
-                        'payload' => json_encode(['reference' => $order->reference]),
-                        'response' => json_encode(['status' => $payment->status]),
+                        'payload' => ['reference' => $order->reference],
+                        'response' => ['status' => $payment->status],
                         'ip_address' => '127.0.0.1',
                         'paid_at' => $payment->paid_at,
                     ],

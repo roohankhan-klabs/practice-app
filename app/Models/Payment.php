@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(
     [
-        'order_id',
         'payment_method_id',
         'transaction_id',
         'amount',
@@ -25,11 +24,6 @@ class Payment extends Model
         'response' => 'array',
         'paid_at' => 'datetime',
     ];
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
-    }
 
     public function paymentMethod()
     {

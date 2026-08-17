@@ -6,6 +6,7 @@ use App\Enums\PaymentStatus;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
+use App\Models\PaymentOrder;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -34,73 +35,75 @@ class SafePayService
         );
     }
 
-    public function pay(Request $request, Order $order, Payment $payment)
+    public function pay(Request $request, Order $order)
     {
-        $amount = (int) round(
-            (float) $order->total_amount * 100
-        );
-
-        if ($amount <= 0) {
-            return response()->json([
-                'message' => 'Invalid order amount.',
-            ], 422);
-        }
-
         try {
-            $newPayment = $payment::create([
-                'order_id' => $order->id,
+            $newPayment = Payment::create([
                 'payment_method_id' => PaymentMethod::SAFEPAY,
                 'amount' => $order->total_amount,
                 'currency' => 'PKR',
                 'status' => PaymentStatus::PENDING,
             ]);
+            PaymentOrder::create([
+                'payment_id' => $newPayment->id,
+                'order_id' => $order->id,
+            ]);
 
+            $safepayAmount = (int) round(
+                (float) $order->total_amount * 100
+            );
+
+            if ($safepayAmount <= 0) {
+                return response()->json([
+                    'message' => 'Invalid order amount.',
+                ], 422);
+            }
             $result = $this->createTracker(
-                amount: $amount,
+                amount: $safepayAmount,
                 currency: 'PKR',
                 metadata: [
                     'order_id' => (string) $order->id,
-                    // 'payment_id' => (string) $newPayment->id,
                 ],
             );
             $tracker = data_get(
                 $result,
-                'data.tracker'
+                'data.tracker.token'
             );
-
-            if (! $tracker) {
-                throw new RuntimeException(
-                    'Safepay did not return a tracker.'
+            if (!$tracker) {
+                throw new \RuntimeException(
+                    'Safepay tracker token/client missing.'
                 );
             }
+            $captureContext =
+                $this->generateCaptureContext(
+                    $tracker
+                );
 
             $newPayment->update([
                 'tracker' => $tracker,
                 'status' => PaymentStatus::PROCESSING,
-                'response' => $result,
+                'response' => [
+                    'tracker' => $result,
+                    'capture_context' => $captureContext,
+                ],
             ]);
-            $captureContext =
-                $this->generateCaptureContext(
-                    $tracker['token']
-                );
 
-            return response()->json([
+            return [
                 'success' => true,
                 'message' => 'Safepay payment initialized.',
                 'payment' => [
                     'id' => $newPayment->id,
                     'order_id' => $order->id,
-                    'amount' => $amount,
+                    'amount' => $safepayAmount / 100,
                     'currency' => 'PKR',
                     'status' => $newPayment->status,
                     'tracker' => $tracker,
                 ],
-
                 'capture_context' => data_get(
                     $captureContext,
                     'data'
                 ),
-            ]);
+            ];
         } catch (Throwable $e) {
 
             report($e);
@@ -163,15 +166,11 @@ class SafePayService
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
+            ->withBody('{}', 'application/json')
             ->post(
                 $this->baseUrl .
                     '/order/payments/v3/' .
-                    $tracker,
-                [
-                    'payload' => [
-                        'origin' => config('app.url'),
-                    ],
-                ]
+                    $tracker
             );
 
         return $this->handleResponse($response);
@@ -208,7 +207,6 @@ class SafePayService
 
         return $this->handleResponse($response);
     }
-
     /**
      * Authorize and capture payment.
      */

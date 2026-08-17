@@ -140,9 +140,9 @@ return new class extends Migration
         });
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete();
             $table->string('transaction_id')->nullable();
+            $table->json('tracker')->nullable();
             $table->string('amount');
             $table->string('currency');
             $table->string('status');

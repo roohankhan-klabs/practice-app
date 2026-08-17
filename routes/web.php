@@ -44,8 +44,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('invitations/{invitation}', [TeamInvitationController::class, 'decline'])->name('invitations.decline');
 });
 
-// Route::get('safepay/success', [SafePayController::class, 'success'])->name('safepay.success');
-// Route::get('safepay/failed', [SafePayController::class, 'failed'])->name('safepay.failed');
+Route::inertia('pay','pay')->name('pay');
+Route::inertia('/safepay/success', 'SafepaySuccess')->name('safepay.success');
+Route::inertia('/safepay/failed', 'SafepayFailed')->name('safepay.failed');
 
 // 4111 1111 1111 1111
 // 5555 5555 5555 4444

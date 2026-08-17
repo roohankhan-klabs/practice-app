@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import type { Address, Bill, CartItem, PaymentMethod } from "@/interfaces/global";
-
-interface CheckoutData {
-    addresses: Address[];
-    cart_items: CartItem[];
-    payment_methods: PaymentMethod[];
-    bill: Bill;
-}
+import type { CheckoutData, Bill, CartItem } from "@/interfaces/global";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,7 +34,8 @@ export default function Checkout() {
                 setLoading(false);
                 toast.success(data.message);
                 console.log("data", data);
-                // window.location.href = `/orders/${data.data.order.id}`;
+                const paymentId = data.data.payment.id;
+                window.location.href = `/pay?payment_id=${paymentId}`;
             } else {
                 setLoading(false);
                 toast.error(data.message);
@@ -86,7 +80,7 @@ export default function Checkout() {
                     setSelectedCartItems(cartItemIds ?? []);
 
                     if (data.data.payment_methods?.length > 0) {
-                        setSelectedPaymentMethodId(data.data.payment_methods[0].id);
+                        setSelectedPaymentMethodId(data.data.payment_methods[3].id);
                     }
 
                     if (data.data.addresses?.length === 0) {

@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
+use App\Models\PaymentOrder;
 use App\Services\AddressService;
 use App\Services\CartService;
 use App\Services\OrderService;
@@ -91,19 +92,17 @@ class OrderController extends Controller
         }
         $orders = $this->orderService->placeOrder($request, $validated, $cartItems);
 
-        $payment = new Payment;
         foreach ($orders as $order) {
             if ($validated['payment_method_id'] == PaymentMethod::CASH_ON_DELIVERY) {
-                $payment = $this->payWithCashOnDelivery($order, $payment, $validated);
+                $payment = $this->payWithCashOnDelivery($order, $validated);
 
                 return $this->formatResponse('Order placed successfully', $payment);
             } elseif ($validated['payment_method_id'] == PaymentMethod::SAFEPAY) {
-                $response = $this->safepay->pay($request, $order, $payment);
-                $responseData = json_decode($response->getContent());
-                if ($responseData && isset($responseData->success) && $responseData->success == true) {
-                    return $this->formatResponse($responseData->message, $responseData);
+                $response = $this->safepay->pay($request, $order);
+                if ($response && isset($response['success']) && $response['success'] == true) {
+                    return $this->formatResponse($response['message'], $response);
                 } else {
-                    $errorMessage = $responseData->message ?? 'Unable to initialize Safepay payment';
+                    $errorMessage = $response['message'] ?? 'Unable to initialize Safepay payment';
 
                     return $this->formatError($errorMessage, 400);
                 }
@@ -113,19 +112,21 @@ class OrderController extends Controller
         return $this->formatError('Unable to place order', 500);
     }
 
-    public function payWithCashOnDelivery(Order $order, Payment $payment, array $validated)
+    public function payWithCashOnDelivery(Order $order, array $validated)
     {
         $transaction_id = 'TXN-'.strtoupper(Str::random(12));
-        $payment = $payment::create([
-            'order_id' => $order->id,
+        $payment = Payment::create([
             'payment_method_id' => PaymentMethod::CASH_ON_DELIVERY,
             'transaction_id' => $transaction_id,
             'amount' => $order->total_amount,
             'currency' => 'PKR',
             'status' => PaymentStatus::COD_PENDING,
         ]);
-        $order->update([
+        PaymentOrder::create([
             'payment_id' => $payment->id,
+            'order_id' => $order->id,
+        ]);
+        $order->update([
             'status' => Order::PENDING,
         ]);
 

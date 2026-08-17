@@ -182,3 +182,10 @@ export interface Address {
     created_at: string,
     id: number
 }
+
+export interface CheckoutData {
+    addresses: Address[];
+    cart_items: CartItem[];
+    payment_methods: PaymentMethod[];
+    bill: Bill;
+}

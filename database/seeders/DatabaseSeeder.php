@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             DemoProductSeeder::class,
             DemoDeviceSeeder::class,
             DemoCartSeeder::class,
-            DemoOrderSeeder::class,
+            // DemoOrderSeeder::class,
         ]);
     }
 }
