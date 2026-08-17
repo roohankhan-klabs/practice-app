@@ -213,8 +213,8 @@ export default function Home() {
                                 setErrors([]);
                             }}
                             className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === "login"
-                                    ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
-                                    : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                                ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
+                                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                                 }`}
                         >
                             Sign In
@@ -225,8 +225,8 @@ export default function Home() {
                                 setErrors([]);
                             }}
                             className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${activeTab === "register"
-                                    ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
-                                    : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                                ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs"
+                                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
                                 }`}
                         >
                             Sign Up

@@ -17,6 +17,47 @@ function buildApiUrl(path: string) {
     return `${window.location.origin}${API_BASE_URL}${path}`;
 }
 
+function extractTransientToken(
+    response: unknown
+) {
+    if (typeof response === 'string' && response !== '') {
+        return response;
+    }
+
+    if (!response || typeof response !== 'object') {
+        return null;
+    }
+
+    const payload = response as Record<string, unknown>;
+    const data =
+        payload.data && typeof payload.data === 'object'
+            ? (payload.data as Record<string, unknown>)
+            : null;
+
+    const candidates = [
+        payload.token,
+        payload.transientToken,
+        payload.transient_token,
+        payload.jwt,
+        payload.tokenJwt,
+        payload.transientTokenJwt,
+        data?.token,
+        data?.transientToken,
+        data?.transient_token,
+        data?.jwt,
+        data?.tokenJwt,
+        data?.transientTokenJwt,
+    ];
+
+    for (const candidate of candidates) {
+        if (typeof candidate === 'string' && candidate !== '') {
+            return candidate;
+        }
+    }
+
+    return null;
+}
+
 export default function Pay() {
     const cardNumberRef =
         useRef<HTMLDivElement | null>(null);
@@ -133,7 +174,7 @@ export default function Pay() {
     async function initializeFlex(
         captureContextJwt: string
     ) {
-        await loadFlexScript();
+        await loadFlexScript(captureContextJwt);
 
         if (!window.Flex) {
             throw new Error(
@@ -218,10 +259,13 @@ export default function Pay() {
                 }
 
                 const transientToken =
-                    response.token ??
-                    response.data?.transientToken;
+                    extractTransientToken(response);
 
                 if (!transientToken) {
+                    console.error(
+                        'Cybersource token response did not include a recognized transient token field.',
+                        response
+                    );
                     setPaymentError(
                         'Transient token was not returned.'
                     );

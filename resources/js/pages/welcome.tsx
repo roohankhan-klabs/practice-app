@@ -12,6 +12,14 @@ import type { Category, SubCategory, Product, Shop } from "../interfaces/global"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+function buildApiUrl(path: string) {
+    if (/^https?:\/\//.test(API_BASE_URL)) {
+        return `${API_BASE_URL}${path}`;
+    }
+
+    return `${window.location.origin}${API_BASE_URL}${path}`;
+}
+
 export default function Welcome() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
@@ -23,7 +31,7 @@ export default function Welcome() {
     useEffect(() => {
         async function getInitData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/init`, {
+                const response = await fetch(buildApiUrl('/init'), {
                     headers: {
                         "Content-Type": "application/json",
                         Accept: "application/json",
@@ -50,10 +58,27 @@ export default function Welcome() {
         }
         getInitData();
     }, []);
-
+    async function addToWishlist(productId: number) {
+        try {
+            const response = await fetch(buildApiUrl(`/wishlists`), {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                }),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (e) {
+            console.error("Error adding to wishlist", e);
+        }
+    }
     async function handleLogout() {
         try {
-            await fetch(`${API_BASE_URL}/logout`, {
+            await fetch(buildApiUrl('/logout'), {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -297,6 +322,7 @@ export default function Welcome() {
                             {filteredProducts.map((product) => {
                                 // Match the product's shop to display shop name
                                 const productShop = shops.find(s => s.id === product.shop_id);
+
                                 return (
                                     <div
                                         key={product.id}
@@ -341,6 +367,9 @@ export default function Welcome() {
                                                         Details
                                                     </Button>
                                                 </Link>
+                                                <Button onClick={() => addToWishlist(product.id)} variant="outline" size="sm" className="w-full text-xs font-semibold">
+                                                    Add to wishlist
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
