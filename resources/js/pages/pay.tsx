@@ -6,7 +6,16 @@ import type {
     CybersourceMicroform,
 } from '@/types/cybersource';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ?? '/api/v1';
+
+function buildApiUrl(path: string) {
+    if (/^https?:\/\//.test(API_BASE_URL)) {
+        return `${API_BASE_URL}${path}`;
+    }
+
+    return `${window.location.origin}${API_BASE_URL}${path}`;
+}
 
 export default function Pay() {
     const cardNumberRef =
@@ -77,7 +86,9 @@ export default function Pay() {
 
         try {
             const response = await fetch(
-                `${API_BASE_URL}/payments/${currentPaymentId}/capture-context`,
+                buildApiUrl(
+                    `/payments/${currentPaymentId}/capture-context`
+                ),
                 {
                     method: 'POST',
                     headers: {
@@ -221,7 +232,9 @@ export default function Pay() {
 
                 try {
                     const tokenResponse = await fetch(
-                        `${API_BASE_URL}/payments/${paymentId}/transient-token`,
+                        buildApiUrl(
+                            `/payments/${paymentId}/transient-token`
+                        ),
                         {
                             method: 'POST',
                             headers: {

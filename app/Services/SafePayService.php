@@ -170,6 +170,7 @@ class SafePayService
      * @return array<string, mixed>
      */
     public function generateCaptureContext(
+        Request $request,
         Payment $payment
     ): array {
         if (! is_string($payment->tracker) || $payment->tracker === '') {
@@ -179,11 +180,12 @@ class SafePayService
         }
 
         $payload = [];
+        $origin = $this->resolveCheckoutOrigin($request);
 
-        if ($this->checkoutOrigin !== '') {
+        if ($origin !== '') {
             $payload = [
                 'payload' => [
-                    'origin' => $this->checkoutOrigin,
+                    'origin' => $origin,
                 ],
             ];
         }
@@ -191,7 +193,7 @@ class SafePayService
         Log::info('Safepay capture context generation started.', [
             'payment_id' => $payment->id,
             'tracker' => $payment->tracker,
-            'origin' => $this->checkoutOrigin,
+            'origin' => $origin,
         ]);
 
         $response = $this->baseRequest()
@@ -670,5 +672,23 @@ class SafePayService
         }
 
         return $origin;
+    }
+
+    private function resolveCheckoutOrigin(
+        Request $request
+    ): string {
+        $originHeader = $request->headers->get('Origin');
+
+        if (is_string($originHeader) && $originHeader !== '') {
+            return $this->normalizeOrigin($originHeader);
+        }
+
+        $refererHeader = $request->headers->get('Referer');
+
+        if (is_string($refererHeader) && $refererHeader !== '') {
+            return $this->normalizeOrigin($refererHeader);
+        }
+
+        return $this->checkoutOrigin;
     }
 }

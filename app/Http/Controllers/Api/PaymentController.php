@@ -58,6 +58,7 @@ class PaymentController extends Controller
 
         $captureContext =
             $this->safepayService->generateCaptureContext(
+                $request,
                 $payment
             );
 
