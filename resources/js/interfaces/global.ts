@@ -44,6 +44,7 @@ export interface Product {
     sub_category_id: number;
     updated_at: string;
     is_in_cart?: boolean;
+    is_in_wishlist?: boolean;
     final_price?: number;
 }
 export interface Image {

@@ -11,6 +11,7 @@ use App\Filament\Resources\Vendors\Schemas\VendorInfolist;
 use App\Filament\Resources\Vendors\Tables\VendorsTable;
 use App\Models\Role;
 use App\Models\User;
+use App\Filament\Resources\Vendors\RelationManagers\ShopsRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -57,7 +58,7 @@ class VendorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ShopsRelationManager::class,
         ];
     }
 

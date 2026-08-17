@@ -1,15 +1,13 @@
 import { Link } from "@inertiajs/react";
-import StorefrontHeader from "@/components/storefront-header";
-import {
-    Search, Store, ShoppingBag, FolderOpen, LogOut, ArrowRight,
-    Star, MessageSquare, PhoneCall, Heart, Sparkles, Compass
-} from "lucide-react";
+import { Search, Store, ShoppingBag, FolderOpen, ArrowRight, Star, PhoneCall, Heart, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import StorefrontHeader from "@/components/storefront-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import type { Category, SubCategory, Product, Shop } from "../interfaces/global";
+import type { Category, Product, Shop } from "../interfaces/global";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -23,7 +21,7 @@ function buildApiUrl(path: string) {
 
 export default function Welcome() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
+    // const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [shops, setShops] = useState<Shop[]>([]);
     const [loading, setLoading] = useState(true);
@@ -39,16 +37,19 @@ export default function Welcome() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
+                
                 if (response.status === 401) {
                     // Token expired or invalid
                     localStorage.removeItem("token");
                     window.location.href = "/";
+
                     return;
                 }
+
                 const data = await response.json();
                 console.log(data);
                 setCategories(data.data.categories || []);
-                setSubcategories(data.data.subcategories || []);
+                // setSubcategories(data.data.subcategories || []);
                 setProducts(data.data.products || []);
                 setShops(data.data.shops || []);
             } catch (error) {
@@ -64,6 +65,7 @@ export default function Welcome() {
             const response = await fetch(buildApiUrl(`/wishlists`), {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     Accept: "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -72,8 +74,16 @@ export default function Welcome() {
                 }),
             });
             const data = await response.json();
-            console.log(data);
+            toast.success(data.message);
+            setProducts(prevProducts => 
+                    prevProducts.map(product => 
+                        product.id === productId 
+                            ? { ...product, is_in_wishlist: !product.is_in_wishlist } 
+                            : product
+                    )
+                );
         } catch (e) {
+            toast.error("Error adding to wishlist");
             console.error("Error adding to wishlist", e);
         }
     }
@@ -83,9 +93,9 @@ export default function Welcome() {
         c.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const filteredSubcategories = subcategories.filter(s =>
-        s.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // const filteredSubcategories = subcategories.filter(s =>
+    //     s.name.toLowerCase().includes(searchQuery.toLowerCase())
+    // );
 
     const filteredShops = shops.filter(s =>
         s.shop_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -199,6 +209,7 @@ export default function Welcome() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredShops.map((shop) => {
                                 const initials = shop.shop_name ? shop.shop_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : "SH";
+                                
                                 return (
                                     <Card key={shop.id} className="overflow-hidden border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow flex flex-col justify-between">
                                         <CardHeader className="p-5 flex flex-row items-start gap-4 space-y-0">
@@ -282,6 +293,17 @@ export default function Welcome() {
                                         {/* Product image area / placeholder */}
                                         <div className="relative aspect-square w-full bg-slate-100 dark:bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-100 dark:border-slate-900">
                                             <ShoppingBag className="h-12 w-12 text-slate-300 dark:text-slate-800 group-hover:scale-110 transition-transform duration-300" />
+                                            {/* {product.images.map(image => (
+                                                <img
+                                                    key={image.id}
+                                                    src={image.image}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                    onError={(e) => {
+                                                        e.currentTarget.src = "/default-product.jpg";
+                                                    }}
+                                                />
+                                            ))} */}
                                             {product.is_featured === 1 && (
                                                 <Badge className="absolute top-3 left-3 bg-indigo-600 text-white font-medium text-xs">
                                                     Featured
@@ -318,9 +340,9 @@ export default function Welcome() {
                                                         Details
                                                     </Button>
                                                 </Link>
-                                                <Button onClick={() => addToWishlist(product.id)} variant="outline" size="sm" className="w-full text-xs font-semibold">
-                                                    Add to wishlist
-                                                </Button>
+                                                <div onClick={() => addToWishlist(product.id)} className={`inline-flex p-2 rounded-full ${product.is_in_wishlist ? "bg-rose-500 text-rose-50" : "bg-grey-50 dark:bg-grey-950/30 text-white-500"}`}>
+                                                    <Heart className="h-5 w-5 fill-current" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

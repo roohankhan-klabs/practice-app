@@ -128,9 +128,9 @@ export default function Home() {
     }
 
     return (
-        <div className="flex min-h-screen w-full flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 font-sans">
+        <div className="flex min-h-screen lg:h-screen lg:overflow-hidden w-full flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 font-sans">
             {/* Left Column: Premium Branding & Info */}
-            <div className="relative flex-1 hidden lg:flex flex-col justify-between p-12 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 text-white overflow-hidden">
+            <div className="relative flex-1 hidden lg:flex flex-col justify-between p-8 xl:p-12 bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 text-white overflow-hidden">
                 {/* Decorative glowing background circles */}
                 <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/20 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-violet-600/10 rounded-full blur-[150px]" />
@@ -146,39 +146,30 @@ export default function Home() {
                 </div>
 
                 {/* Main Content */}
-                <div className="relative z-10 my-auto max-w-lg space-y-6">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-medium text-indigo-300 ring-1 ring-inset ring-indigo-500/20">
+                <div className="relative z-10 my-auto max-w-lg space-y-4 xl:space-y-6 py-6">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-300 ring-1 ring-inset ring-indigo-500/20">
                         <Sparkles className="h-3.5 w-3.5" /> Curated Marketplace Platform
                     </span>
-                    <h2 className="text-4xl font-extrabold tracking-tight leading-tight lg:text-5xl">
+                    <h2 className="text-3xl xl:text-4xl font-extrabold tracking-tight leading-tight">
                         Discover & support local independent shops.
                     </h2>
-                    <p className="text-slate-300 text-lg leading-relaxed">
+                    <p className="text-slate-350 text-md xl:text-lg leading-relaxed">
                         NexusMarket bridges the gap between passionate creators and curious shoppers. Explore catalogued items, custom variants, and unique offerings.
                     </p>
 
                     {/* Features list */}
-                    <div className="space-y-4 pt-4">
-                        <div className="flex items-start gap-3">
-                            <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-1 shrink-0" />
-                            <div>
-                                <h4 className="font-semibold text-slate-100">Multiple Curated Shops</h4>
-                                <p className="text-sm text-slate-400">Browse product collections organized directly by individual shop owners.</p>
-                            </div>
+                    <div className="space-y-3 pt-2">
+                        <div className="flex items-center gap-3">
+                            <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                            <span className="text-md xl:text-lg font-semibold text-slate-200">Multiple Curated Shops</span>
                         </div>
-                        <div className="flex items-start gap-3">
-                            <ShoppingBag className="h-5 w-5 text-emerald-400 mt-1 shrink-0" />
-                            <div>
-                                <h4 className="font-semibold text-slate-100">Tailored Variant Selection</h4>
-                                <p className="text-sm text-slate-400">Order matching sizes, custom styles, and personalized options seamlessly.</p>
-                            </div>
+                        <div className="flex items-center gap-3">
+                            <ShoppingBag className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                            <span className="text-md xl:text-lg font-semibold text-slate-200">Tailored Variant Selection</span>
                         </div>
-                        <div className="flex items-start gap-3">
-                            <ShieldCheck className="h-5 w-5 text-emerald-400 mt-1 shrink-0" />
-                            <div>
-                                <h4 className="font-semibold text-slate-100">Secure Payments & Checkout</h4>
-                                <p className="text-sm text-slate-400">Integrated safe transaction processes for complete peace of mind.</p>
-                            </div>
+                        <div className="flex items-center gap-3">
+                            <ShieldCheck className="h-4.5 w-4.5 text-emerald-400 shrink-0" />
+                            <span className="text-md xl:text-lg font-semibold text-slate-200">Secure Payments & Checkout</span>
                         </div>
                     </div>
                 </div>
@@ -190,11 +181,11 @@ export default function Home() {
             </div>
 
             {/* Right Column: Form Container */}
-            <div className="flex flex-1 flex-col justify-center items-center p-6 sm:p-12 lg:p-24 relative">
+            <div className="flex flex-1 flex-col items-center justify-center lg:justify-start lg:overflow-y-auto relative p-6 sm:p-12 lg:p-8 xl:p-16">
                 {/* Decorative bg on mobile */}
                 <div className="absolute top-0 right-0 w-[30%] h-[30%] bg-indigo-500/10 rounded-full blur-[80px] lg:hidden -z-10" />
 
-                <div className="w-full max-w-md space-y-6">
+                <div className="w-full max-w-md space-y-6 lg:my-auto py-4 lg:py-8 shrink-0">
                     {/* Header on mobile */}
                     <div className="flex items-center gap-2.5 lg:hidden mb-6">
                         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white">

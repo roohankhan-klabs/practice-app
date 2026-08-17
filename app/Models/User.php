@@ -76,9 +76,9 @@ class User extends Authenticatable implements PasskeyUser
         return $this->hasOne(Address::class)->where('is_default', true);
     }
 
-    public function shop()
+    public function shops()
     {
-        return $this->hasOne(Shop::class);
+        return $this->hasMany(Shop::class);
     }
 
     public function wishlist()

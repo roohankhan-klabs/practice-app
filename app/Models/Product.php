@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\Model;
 )]
 class Product extends Model
 {
-    protected $appends = ['is_in_cart', 'final_price'];
+    protected $appends = ['is_in_cart', 'is_in_wishlist', 'final_price'];
 
     public function shop()
     {
@@ -78,6 +78,17 @@ class Product extends Model
             ->whereHas('cartItems', function ($query) {
                 $query->where('product_id', $this->id);
             })
+            ->exists();
+    }
+    public function getIsInWishlistAttribute()
+    {
+        $user = auth('sanctum')->user();
+        if (! $user) {
+            return false;
+        }
+
+        return Wishlist::where('user_id', $user->id)
+            ->where('product_id', $this->id)
             ->exists();
     }
     public function getFinalPriceAttribute(){
